@@ -1,0 +1,47 @@
+buildscript {
+    dependencies {
+        classpath group: 'de.dynamicfiles.projects.gradle.plugins', name: 'javafx-gradle-plugin', version: '8.8.2'
+        classpath group: 'org.apache.commons', name: 'commons-csv', version: '1.5'
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
+    }
+}
+plugins {
+    id 'java'
+}
+
+group 'ioiobagiety'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+
+dependencies {
+    //testCompile group: 'junit', name: 'junit', version: '5.3.2'
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.3.2")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.2")
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-csv
+    compile group: 'org.apache.commons', name: 'commons-csv', version: '1.1'
+}
+
+apply plugin: 'javafx-gradle-plugin'
+
+jfx {
+    // minimal requirement for jfxJar-task
+    mainClass = 'Application.Main'
+
+    // minimal requirement for jfxNative-task
+    vendor = 'IOIOBagiety'
+
+    // some optional task
+    jfxAppOutputDir = 'build'
+    jfxMainAppJarName = 'Scheduling_supporter.jar'
+    manifestAttributes = [
+            "Specification-Version": 1.0,
+            "Implementation-Version": 1,
+            "Built-By": "IOIOBagiety",
+    ]
+}
