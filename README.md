@@ -3,6 +3,11 @@
 
 Make sure you have Java 1.8 installed and Gradle added to path.
 
+### Run
+```sh
+gradle build
+gradle run
+```
 
 ### REST
 ### Test endpoints
