@@ -1,6 +1,5 @@
 package ioiobagiety.model;
 
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -13,9 +12,10 @@ public class HelloIOBagiety implements java.io.Serializable {
     private Long id;
     private String name;
 
-    public HelloIOBagiety(){};
+    public HelloIOBagiety() {
+    }
 
-    public HelloIOBagiety(String name){
+    public HelloIOBagiety(String name) {
         this.name = name;
     }
 }
