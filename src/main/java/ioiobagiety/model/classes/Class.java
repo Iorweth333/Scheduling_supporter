@@ -28,4 +28,64 @@ public class Class {
     private Classroom classroom;
     @OneToOne
     private Group group;
+
+    public Class() {
+
+    }
+
+    public Date getDate () {
+        return date;
+    }
+
+    public void setDate (Date date) {
+        this.date = date;
+    }
+
+    public Time getStartsAt () {
+        return startsAt;
+    }
+
+    public void setStartsAt (Time startsAt) {
+        this.startsAt = startsAt;
+    }
+
+    public Time getEndsAt () {
+        return endsAt;
+    }
+
+    public void setEndsAt (Time endsAt) {
+        this.endsAt = endsAt;
+    }
+
+    public Subject getSubject () {
+        return subject;
+    }
+
+    public void setSubject (Subject subject) {
+        this.subject = subject;
+    }
+
+    public User getLecturer () {
+        return lecturer;
+    }
+
+    public void setLecturer (User lecturer) {
+        this.lecturer = lecturer;
+    }
+
+    public Classroom getClassroom () {
+        return classroom;
+    }
+
+    public void setClassroom (Classroom classroom) {
+        this.classroom = classroom;
+    }
+
+    public Group getGroup () {
+        return group;
+    }
+
+    public void setGroup (Group group) {
+        this.group = group;
+    }
 }
