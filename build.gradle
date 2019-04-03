@@ -1,47 +1,34 @@
-buildscript {
-    dependencies {
-        classpath group: 'de.dynamicfiles.projects.gradle.plugins', name: 'javafx-gradle-plugin', version: '8.8.2'
-        classpath group: 'org.apache.commons', name: 'commons-csv', version: '1.5'
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
-    }
-}
 plugins {
-    id 'java'
+	id 'org.springframework.boot' version '2.1.3.RELEASE'
+	id 'java'
 }
 
-group 'ioiobagiety'
-version '1.0-SNAPSHOT'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'application'
 
-sourceCompatibility = 1.8
+
+mainClassName = 'ioiobagiety.SchedulingSupporterApplication'
+
+group = 'ioiobagiety'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '8'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
 repositories {
-    mavenCentral()
-    mavenLocal()
+	mavenCentral()
 }
-
 
 dependencies {
-    //testCompile group: 'junit', name: 'junit', version: '5.3.2'
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.3.2")
-    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.2")
-    // https://mvnrepository.com/artifact/org.apache.commons/commons-csv
-    compile group: 'org.apache.commons', name: 'commons-csv', version: '1.1'
-}
-
-apply plugin: 'javafx-gradle-plugin'
-
-jfx {
-    // minimal requirement for jfxJar-task
-    mainClass = 'Application.Main'
-
-    // minimal requirement for jfxNative-task
-    vendor = 'IOIOBagiety'
-
-    // some optional task
-    jfxAppOutputDir = 'build'
-    jfxMainAppJarName = 'Scheduling_supporter.jar'
-    manifestAttributes = [
-            "Specification-Version": 1.0,
-            "Implementation-Version": 1,
-            "Built-By": "IOIOBagiety",
-    ]
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	compile group: 'com.h2database', name: 'h2', version: '1.4.199'
+	compile group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
 }
