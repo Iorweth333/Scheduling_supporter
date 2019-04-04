@@ -6,8 +6,8 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "Group")
-public class Group {
+@Table(name = "StudentsGroup")
+public class StudentsGroup {
 
     @Id
     private Long id;
@@ -18,7 +18,7 @@ public class Group {
     @OneToMany
     private List<User> students;
 
-    public Group() {
+    public StudentsGroup () {
 
     }
 

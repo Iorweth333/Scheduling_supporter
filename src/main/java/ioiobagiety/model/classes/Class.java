@@ -1,7 +1,7 @@
 package ioiobagiety.model.classes;
 
 import ioiobagiety.model.classroom.Classroom;
-import ioiobagiety.model.group.Group;
+import ioiobagiety.model.group.StudentsGroup;
 import ioiobagiety.model.user.User;
 
 import javax.persistence.Entity;
@@ -27,7 +27,7 @@ public class Class {
     @OneToOne
     private Classroom classroom;
     @OneToOne
-    private Group group;
+    private StudentsGroup studentsGroup;
 
     public Class() {
 
@@ -81,11 +81,11 @@ public class Class {
         this.classroom = classroom;
     }
 
-    public Group getGroup () {
-        return group;
+    public StudentsGroup getStudentsGroup () {
+        return studentsGroup;
     }
 
-    public void setGroup (Group group) {
-        this.group = group;
+    public void setStudentsGroup (StudentsGroup studentsGroup) {
+        this.studentsGroup = studentsGroup;
     }
 }
