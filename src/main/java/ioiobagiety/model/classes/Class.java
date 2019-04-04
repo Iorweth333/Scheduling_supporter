@@ -20,6 +20,8 @@ public class Class {
     private Date date;
     private Time startsAt;
     private Time endsAt;
+    private Integer meetingNumber;
+    private String scheduleName;
     @OneToOne
     private Subject subject;
     @OneToOne
@@ -55,6 +57,22 @@ public class Class {
 
     public void setEndsAt (Time endsAt) {
         this.endsAt = endsAt;
+    }
+
+    public Integer getMeetingNumber () {
+        return meetingNumber;
+    }
+
+    public void setMeetingNumber (Integer meetingNumber) {
+        this.meetingNumber = meetingNumber;
+    }
+
+    public String getScheduleName () {
+        return scheduleName;
+    }
+
+    public void setScheduleName (String scheduleName) {
+        this.scheduleName = scheduleName;
     }
 
     public Subject getSubject () {
