@@ -10,6 +10,7 @@ import java.util.List;
 public class StudentsGroup {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private String fieldOfStudy;
@@ -20,6 +21,14 @@ public class StudentsGroup {
 
     public StudentsGroup () {
 
+    }
+
+    public Long getId () {
+        return id;
+    }
+
+    public void setId (Long id) {
+        this.id = id;
     }
 
     public String getName () {

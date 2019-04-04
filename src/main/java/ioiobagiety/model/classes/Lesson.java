@@ -4,18 +4,16 @@ import ioiobagiety.model.classroom.Classroom;
 import ioiobagiety.model.group.StudentsGroup;
 import ioiobagiety.model.user.AppUser;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Time;
 import java.util.Date;
 
 @Entity
-@Table(name = "Class")
-public class Class {
+@Table(name = "Lesson")
+public class Lesson {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Date date;
     private Time startsAt;
@@ -31,8 +29,16 @@ public class Class {
     @OneToOne
     private StudentsGroup studentsGroup;
 
-    public Class() {
+    public Lesson () {
 
+    }
+
+    public Long getId () {
+        return id;
+    }
+
+    public void setId (Long id) {
+        this.id = id;
     }
 
     public Date getDate () {
