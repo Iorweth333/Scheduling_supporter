@@ -1,6 +1,6 @@
 package ioiobagiety.model.group;
 
-import ioiobagiety.model.user.User;
+import ioiobagiety.model.user.AppUser;
 
 import javax.persistence.*;
 import java.util.List;
@@ -16,7 +16,7 @@ public class StudentsGroup {
     private String yearOfStudy;
     private CourseType courseType;
     @OneToMany
-    private List<User> students;
+    private List<AppUser> students;
 
     public StudentsGroup () {
 
@@ -54,11 +54,11 @@ public class StudentsGroup {
         this.courseType = courseType;
     }
 
-    public List<User> getStudents () {
+    public List<AppUser> getStudents () {
         return students;
     }
 
-    public void setStudents (List<User> students) {
+    public void setStudents (List<AppUser> students) {
         this.students = students;
     }
 }

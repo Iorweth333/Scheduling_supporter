@@ -5,8 +5,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "User")
-public class User {
+@Table(name = "AppUser")
+public class AppUser {
 
     @Id
     private Long id;
@@ -18,7 +18,7 @@ public class User {
     private String email;
     private UserType userType;
 
-    public User() {
+    public AppUser () {
 
     }
 

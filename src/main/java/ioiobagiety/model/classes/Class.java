@@ -2,7 +2,7 @@ package ioiobagiety.model.classes;
 
 import ioiobagiety.model.classroom.Classroom;
 import ioiobagiety.model.group.StudentsGroup;
-import ioiobagiety.model.user.User;
+import ioiobagiety.model.user.AppUser;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -25,7 +25,7 @@ public class Class {
     @OneToOne
     private Subject subject;
     @OneToOne
-    private User lecturer;
+    private AppUser lecturer;
     @OneToOne
     private Classroom classroom;
     @OneToOne
@@ -83,11 +83,11 @@ public class Class {
         this.subject = subject;
     }
 
-    public User getLecturer () {
+    public AppUser getLecturer () {
         return lecturer;
     }
 
-    public void setLecturer (User lecturer) {
+    public void setLecturer (AppUser lecturer) {
         this.lecturer = lecturer;
     }
 
