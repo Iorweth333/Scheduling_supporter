@@ -22,7 +22,9 @@ localhost:8080/uploadFile
 localhost:8080/uploadMultipleFiles
 localhost:8080/downloadFile/{filename}
 ```
-While using ```uploadFile``` i ```uploadMultipleFiles``` you should add file(s) in body.
+Required keys for:  
+ ```uploadFile``` -> ```file```  
+ ```uploadMultipleFiles``` -> ```files```
 #####Response message
 ```json
 {
