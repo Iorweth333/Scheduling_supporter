@@ -8,6 +8,7 @@
 *.war
 *.ear
 .gradle/
+!gradle/wrapper/*
 
 # Ignore Gradle GUI config
 gradle-app.setting
