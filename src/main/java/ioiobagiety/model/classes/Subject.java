@@ -1,7 +1,7 @@
 package ioiobagiety.model.classes;
 
-import ioiobagiety.model.group.Group;
-import ioiobagiety.model.user.User;
+import ioiobagiety.model.group.StudentsGroup;
+import ioiobagiety.model.user.AppUser;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,15 +11,24 @@ import java.util.List;
 public class Subject {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     @OneToMany
-    private List<Group> groups;
+    private List<StudentsGroup> studentsGroups;
     @OneToMany
-    private List<User> lecturers;
+    private List<AppUser> lecturers;
 
     public Subject() {
 
+    }
+
+    public Long getId () {
+        return id;
+    }
+
+    public void setId (Long id) {
+        this.id = id;
     }
 
     public String getName () {
@@ -30,19 +39,19 @@ public class Subject {
         this.name = name;
     }
 
-    public List<Group> getGroups () {
-        return groups;
+    public List<StudentsGroup> getStudentsGroups () {
+        return studentsGroups;
     }
 
-    public void setGroups (List<Group> groups) {
-        this.groups = groups;
+    public void setStudentsGroups (List<StudentsGroup> studentsGroups) {
+        this.studentsGroups = studentsGroups;
     }
 
-    public List<User> getLecturers () {
+    public List<AppUser> getLecturers () {
         return lecturers;
     }
 
-    public void setLecturers (List<User> lecturers) {
+    public void setLecturers (List<AppUser> lecturers) {
         this.lecturers = lecturers;
     }
 }
