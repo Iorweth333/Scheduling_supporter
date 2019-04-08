@@ -18,7 +18,7 @@ import java.util.*;
 public class XLSXParser {
 
     public ArrayList<Lesson> parseSheet (Sheet worksheet) throws ParseException {
-        ArrayList<String> headers = getHeaders(worksheet);
+        String schedule_name = worksheet.getSheetName();
         Map<String, Subject> subjects = getSubjects(worksheet);
         Map<String, Classroom> classrooms = getClassrooms(worksheet);
         Map<String, AppUser> lecturers = getLecturers(worksheet);
@@ -28,9 +28,11 @@ public class XLSXParser {
 
         ArrayList<Lesson> lessons = new ArrayList<>();
 
+        int meetingNumber = 1;
         while (rows.hasNext()) {
             Row row = rows.next();
             if (row.getLastCellNum() % 3 == 0) {
+                meetingNumber = parseMeetingNumber(row, meetingNumber);
                 Date date = parseDate(row);
                 Time startsAt = parseStartTime(row);
                 Time endsAt = parseEndsTime(row);
@@ -41,6 +43,8 @@ public class XLSXParser {
                         String classroom = parseClassroom(row, i);
                         String lecturer = String.join(" ", parseLecturer(row, i));
                         Lesson lesson = new Lesson();
+                        lesson.setScheduleName(schedule_name);
+                        lesson.setMeetingNumber(meetingNumber);
                         lesson.setDate(date);
                         lesson.setStartsAt(startsAt);
                         lesson.setEndsAt(endsAt);
@@ -134,6 +138,14 @@ public class XLSXParser {
         return lecturers;
     }
 
+    private int parseMeetingNumber (Row row, int lastNumber) {
+        Cell cell = row.getCell(COLUMN.MEETING.value());
+        if (cell.getCellTypeEnum() == CellType.NUMERIC) {
+            return (int) cell.getNumericCellValue();
+        }
+        return lastNumber;
+    }
+
     private Date parseDate (Row row) throws ParseException {
         String date = row.getCell(COLUMN.DATE.value()).getStringCellValue();
         return new SimpleDateFormat("dd.MM.yyyy").parse(date);
@@ -168,7 +180,7 @@ public class XLSXParser {
     }
 
     private enum COLUMN {
-        DATE, TIME, SUBJECT, CLASSROOM, LECTURER;
+        MEETING, DATE, TIME, SUBJECT, CLASSROOM, LECTURER;
 
         public int value () {
             return value(1);
@@ -176,6 +188,8 @@ public class XLSXParser {
 
         public int value (int group) {
             switch (this) {
+                case MEETING:
+                    return 0;
                 case DATE:
                     return 1;
                 case TIME:
