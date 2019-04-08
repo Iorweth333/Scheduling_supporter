@@ -20,13 +20,13 @@ public class Lesson {
     private Time endsAt;
     private Integer meetingNumber;
     private String scheduleName;
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     private Subject subject;
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     private AppUser lecturer;
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     private Classroom classroom;
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     private StudentsGroup studentsGroup;
 
     public Lesson () {
