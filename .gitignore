@@ -10,6 +10,7 @@
 /backend/.gradle/
 /backend/gradle/
 /backend/scores.txt
+/backend/uploads
 
 # Ignore Gradle GUI config
 /backend/gradle-app.setting
