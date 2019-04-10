@@ -21,7 +21,7 @@ matrix:
       env: TO_TEST=BACKEND
 
 install:
-  - if [ "$TO_TEST == "FRONTEND" ]; then
+  - if [ "$TO_TEST" == "FRONTEND" ]; then
       cd frontend;
       npm install;
       fi
