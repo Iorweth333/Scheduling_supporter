@@ -5,7 +5,10 @@
   "dependencies": {
     "axios": "^0.18.0",
     "fullcalendar-reactwrapper": "^1.0.7",
+    "interactjs": "^1.4.0-rc.9",
+    "moment": "^2.24.0",
     "react": "^16.8.6",
+    "react-calendar-timeline": "^0.23.1",
     "react-dom": "^16.8.6",
     "react-redux": "^6.0.1",
     "react-router-dom": "^5.0.0",
