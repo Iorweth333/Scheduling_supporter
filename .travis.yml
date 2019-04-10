@@ -9,8 +9,7 @@ cache:
 env:
   - DB=orientDB
 before_install:
-  - cd backend
-  - chmod +x gradlew    #to avoid "/home/travis/.travis/functions: line 315: ./gradlew: Permission denied" error
+  -
 
 matrix:
   fast_finish: true
@@ -21,21 +20,20 @@ matrix:
       env: TO_TEST=BACKEND
 
 install:
-  - |
-    if [ "$TO_TEST" == "FRONTEND" ]; then
-      cd frontend
-      npm install
+  - if [ $TO_TEST == "FRONTEND" ]; then
+      cd frontend;
+      npm install;
+      cd ..;
       fi
 
 script:
-  - |
-    if [ "$TO_TEST" = "BACKEND" ];
-      cd $HOME/backend/
-      ./gradlew assemble
-      ./gradlew check
+  - if [ $TO_TEST == "BACKEND" ];
+      cd backend;
+      chmod +x gradlew;
+      ./gradlew assemble;
+      ./gradlew check;
       fi
-  - |
-    if [ "$TO_TEST" = "FRONTEND" ]; then
-      npm start
-      npm test
+  - if [ $TO_TEST == "FRONTEND" ]; then
+      npm start;
+      npm test;
       fi
