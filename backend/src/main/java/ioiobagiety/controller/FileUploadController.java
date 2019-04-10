@@ -27,6 +27,7 @@ public class FileUploadController {
     @Autowired
     private FileStorageService fileStorageService;
 
+    @CrossOrigin(maxAge = 3600)
     @PostMapping("/uploadFile")
     public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
         String fileName = fileStorageService.storeFile(file);
