@@ -39,15 +39,8 @@ public class FileUploadController {
                                                             .path(fileName)
                                                             .toUriString();
 
-        try {
-            if (fileName != null) {
-                if (fileName.endsWith(".xlsx") || fileName.endsWith(".xls")) {
-                    saveContentsController.saveXLSXContents(file);
-                }
-            }
-        } catch (Exception ex) {
-            logger.info("Could not import from excel file. " + ex.getMessage());
-        }
+        saveContentsController.saveFileContents(file);
+
         return new UploadFileResponse(fileName, fileDownloadUri, file.getContentType(), file.getSize());
     }
 
