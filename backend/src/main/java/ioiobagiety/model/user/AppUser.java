@@ -1,14 +1,13 @@
 package ioiobagiety.model.user;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "User")
-public class User {
+@Table(name = "AppUser")
+public class AppUser {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private String surname;
@@ -18,8 +17,16 @@ public class User {
     private String email;
     private UserType userType;
 
-    public User() {
+    public AppUser () {
 
+    }
+
+    public Long getId () {
+        return id;
+    }
+
+    public void setId (Long id) {
+        this.id = id;
     }
 
     public String getName () {

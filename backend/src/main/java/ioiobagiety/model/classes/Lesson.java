@@ -1,36 +1,44 @@
 package ioiobagiety.model.classes;
 
 import ioiobagiety.model.classroom.Classroom;
-import ioiobagiety.model.group.Group;
-import ioiobagiety.model.user.User;
+import ioiobagiety.model.group.StudentsGroup;
+import ioiobagiety.model.user.AppUser;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Time;
 import java.util.Date;
 
 @Entity
-@Table(name = "Class")
-public class Class {
+@Table(name = "Lesson")
+public class Lesson {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Date date;
     private Time startsAt;
     private Time endsAt;
+    private Integer meetingNumber;
+    private String scheduleName;
     @OneToOne
     private Subject subject;
     @OneToOne
-    private User lecturer;
+    private AppUser lecturer;
     @OneToOne
     private Classroom classroom;
     @OneToOne
-    private Group group;
+    private StudentsGroup studentsGroup;
 
-    public Class() {
+    public Lesson () {
 
+    }
+
+    public Long getId () {
+        return id;
+    }
+
+    public void setId (Long id) {
+        this.id = id;
     }
 
     public Date getDate () {
@@ -57,6 +65,22 @@ public class Class {
         this.endsAt = endsAt;
     }
 
+    public Integer getMeetingNumber () {
+        return meetingNumber;
+    }
+
+    public void setMeetingNumber (Integer meetingNumber) {
+        this.meetingNumber = meetingNumber;
+    }
+
+    public String getScheduleName () {
+        return scheduleName;
+    }
+
+    public void setScheduleName (String scheduleName) {
+        this.scheduleName = scheduleName;
+    }
+
     public Subject getSubject () {
         return subject;
     }
@@ -65,11 +89,11 @@ public class Class {
         this.subject = subject;
     }
 
-    public User getLecturer () {
+    public AppUser getLecturer () {
         return lecturer;
     }
 
-    public void setLecturer (User lecturer) {
+    public void setLecturer (AppUser lecturer) {
         this.lecturer = lecturer;
     }
 
@@ -81,11 +105,11 @@ public class Class {
         this.classroom = classroom;
     }
 
-    public Group getGroup () {
-        return group;
+    public StudentsGroup getStudentsGroup () {
+        return studentsGroup;
     }
 
-    public void setGroup (Group group) {
-        this.group = group;
+    public void setStudentsGroup (StudentsGroup studentsGroup) {
+        this.studentsGroup = studentsGroup;
     }
 }

@@ -1,25 +1,34 @@
 package ioiobagiety.model.group;
 
-import ioiobagiety.model.user.User;
+import ioiobagiety.model.user.AppUser;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "Group")
-public class Group {
+@Table(name = "StudentsGroup")
+public class StudentsGroup {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private String fieldOfStudy;
     private String yearOfStudy;
     private CourseType courseType;
     @OneToMany
-    private List<User> students;
+    private List<AppUser> students;
 
-    public Group() {
+    public StudentsGroup () {
 
+    }
+
+    public Long getId () {
+        return id;
+    }
+
+    public void setId (Long id) {
+        this.id = id;
     }
 
     public String getName () {
@@ -54,11 +63,11 @@ public class Group {
         this.courseType = courseType;
     }
 
-    public List<User> getStudents () {
+    public List<AppUser> getStudents () {
         return students;
     }
 
-    public void setStudents (List<User> students) {
+    public void setStudents (List<AppUser> students) {
         this.students = students;
     }
 }

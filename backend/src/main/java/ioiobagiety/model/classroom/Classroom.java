@@ -1,14 +1,13 @@
 package ioiobagiety.model.classroom;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "Classroom")
 public class Classroom {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String number;
     private String building;
@@ -16,6 +15,14 @@ public class Classroom {
 
     public Classroom() {
 
+    }
+
+    public Long getId () {
+        return id;
+    }
+
+    public void setId (Long id) {
+        this.id = id;
     }
 
     public String getNumber () {
