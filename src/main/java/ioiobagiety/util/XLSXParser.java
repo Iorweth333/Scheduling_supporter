@@ -9,6 +9,10 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.web.multipart.MultipartException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Time;
 import java.text.ParseException;
@@ -16,6 +20,19 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class XLSXParser {
+
+    public ArrayList<Lesson> parseXLSX (MultipartFile file) throws MultipartException {
+        try {
+            XSSFWorkbook offices = new XSSFWorkbook(file.getInputStream());
+            XSSFSheet worksheet = offices.getSheetAt(0);
+
+            XLSXParser parser = new XLSXParser();
+
+            return parser.parseSheet(worksheet);
+        } catch (Exception e) {
+            throw new MultipartException("Constraints Violated");
+        }
+    }
 
     public ArrayList<Lesson> parseSheet (Sheet worksheet) throws ParseException {
         String schedule_name = worksheet.getSheetName();
@@ -124,12 +141,13 @@ public class XLSXParser {
             for (int i = 1; COLUMN.LECTURER.value(i) < row.getLastCellNum(); i++) {
                 if (validCell(row, COLUMN.LECTURER.value(i))) {
                     String[] name = parseLecturer(row, i);
-                    if (!lecturers.containsKey(String.join(" ", name))) {
+                    String fullName = String.join(" ", name);
+                    if (!lecturers.containsKey(fullName)) {
                         AppUser lecturer = new AppUser();
                         lecturer.setUserType(UserType.lecturer);
                         lecturer.setName(name[0]);
                         lecturer.setSurname(name[1]);
-                        lecturers.put(String.join(" ", name), lecturer);
+                        lecturers.put(fullName, lecturer);
                     }
                 }
             }
