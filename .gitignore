@@ -1,5 +1,4 @@
 ### backend ### 
-
 /backend/.idea/
 /backend/build/
 /backend/out/
@@ -8,7 +7,7 @@
 /backend/*.war
 /backend/*.ear
 /backend/.gradle/
-/backend/gradle/
+!/backend/gradle/wrapper/*
 /backend/scores.txt
 /backend/uploads
 
@@ -17,7 +16,6 @@
 
 # Cache of project
 /backend/.gradletasknamecache
-
 
 ### IntelliJ IDEA ###
 /backend/.idea/
