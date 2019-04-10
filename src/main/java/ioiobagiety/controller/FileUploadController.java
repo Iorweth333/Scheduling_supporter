@@ -35,7 +35,7 @@ public class FileUploadController {
     private FileStorageService fileStorageService;
 
     @Autowired
-    private LessonService lessonService;
+    private SaveContentsController saveContentsController;
 
     @PostMapping("/uploadFile")
     public UploadFileResponse uploadFile (@RequestParam("file") MultipartFile file) {
@@ -47,12 +47,15 @@ public class FileUploadController {
                                                             .toUriString();
 
         try {
-            saveXLSXContents(file);
+            if (fileName != null) {
+                if (fileName.endsWith(".xlsx") || fileName.endsWith(".xls")) {
+                    saveContentsController.saveXLSXContents(file);
+                }
+            }
         } catch (Exception ex) {
-            logger.info("Could not save xlsx. " + ex.getMessage());
+            logger.info("Could not import from excel file. " + ex.getMessage());
         }
-        return new UploadFileResponse(fileName, fileDownloadUri,
-                                      file.getContentType(), file.getSize());
+        return new UploadFileResponse(fileName, fileDownloadUri, file.getContentType(), file.getSize());
     }
 
     @PostMapping("/uploadMultipleFiles")
@@ -84,20 +87,4 @@ public class FileUploadController {
                              .body(resource);
     }
 
-
-    private void saveXLSXContents (MultipartFile file) throws MultipartException {
-        try {
-            XSSFWorkbook offices = new XSSFWorkbook(file.getInputStream());
-            XSSFSheet worksheet = offices.getSheetAt(0);
-
-            XLSXParser parser = new XLSXParser();
-
-            ArrayList<Lesson> lessons = parser.parseSheet(worksheet);
-
-            lessons.forEach(lessonService::create);
-
-        } catch (Exception e) {
-            throw new MultipartException("Constraints Violated");
-        }
-    }
 }
