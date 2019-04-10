@@ -27,13 +27,14 @@ install:
       fi
 
 script:
-  - if [ $TO_TEST == "BACKEND" ];
+  - if [ $TO_TEST == "BACKEND" ]; then
       cd backend;
       chmod +x gradlew;
       ./gradlew assemble;
       ./gradlew check;
       fi
   - if [ $TO_TEST == "FRONTEND" ]; then
+      cd frontend;
       npm start;
       npm test;
       fi
