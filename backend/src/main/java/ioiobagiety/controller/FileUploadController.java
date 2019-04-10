@@ -30,6 +30,7 @@ public class FileUploadController {
     @Autowired
     private SaveContentsController saveContentsController;
 
+    @CrossOrigin(maxAge = 3600)
     @PostMapping("/uploadFile")
     public UploadFileResponse uploadFile (@RequestParam("file") MultipartFile file) {
         String fileName = fileStorageService.storeFile(file);
@@ -72,5 +73,4 @@ public class FileUploadController {
                                      "attachment; filename=\"" + resource.getFilename() + "\"")
                              .body(resource);
     }
-
 }

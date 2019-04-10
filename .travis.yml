@@ -1,0 +1,12 @@
+language: java
+before_cache:           #to avoid uploading cache every time we build
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+env:
+  - DB=orientDB
+before_install:
+  - chmod +x gradlew    #to avoid "/home/travis/.travis/functions: line 315: ./gradlew: Permission denied" error

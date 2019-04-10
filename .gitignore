@@ -1,36 +1,47 @@
-#files/directories/patterns intentionally ignored by git
-
-.idea
-/build/
-/out/
-*.class
-*.jar
-*.war
-*.ear
-.gradle/
-gradle/
-scores.txt
+### backend ### 
+/backend/.idea/
+/backend/build/
+/backend/out/
+/backend/*.class
+/backend/*.jar
+/backend/*.war
+/backend/*.ear
+/backend/.gradle/
+!/backend/gradle/wrapper/*
+/backend/scores.txt
+/backend/uploads
 
 # Ignore Gradle GUI config
-gradle-app.setting
+/backend/gradle-app.setting
 
 # Cache of project
-.gradletasknamecache
-
+/backend/.gradletasknamecache
 
 ### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-/out/
+/backend/.idea/
+/backend/*.iws
+/backend/*.iml
+/backend/*.ipr
+/backend/out/
 
 ### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+/backend/nbproject/private/
+/backend/nbbuild/
+/backend/dist/
+/backend/nbdist/
+/backend/.nb-gradle/
 
 ### VS Code ###
-.vscode/
+/backend/.vscode/
+## -------- ###
+
+
+### frontend ### 
+/frontend/build
+/frontend/node_modules
+/frontend/package-lock.json
+/frontend/.vscode/
+/frontend/.idea/
+### ------- ###
+
+
