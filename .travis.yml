@@ -9,4 +9,5 @@ cache:
 env:
   - DB=orientDB
 before_install:
+  - cd backend
   - chmod +x gradlew    #to avoid "/home/travis/.travis/functions: line 315: ./gradlew: Permission denied" error
