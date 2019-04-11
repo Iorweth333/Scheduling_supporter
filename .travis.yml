@@ -14,26 +14,17 @@ matrix:
   fast_finish: true
   include:
     - language: node_js
-      env: TO_TEST=FRONTEND
     - language: java
-      env: TO_TEST=BACKEND
-
-install:
-  - if [ $TO_TEST == "FRONTEND" ]; then
-      cd frontend;
-      npm install;
-      cd ..;
-      fi
 
 script:
-  - if [ $TO_TEST == "BACKEND" ]; then
+  - if [ $language == "java" ]; then
       cd backend;
       chmod +x gradlew;
       ./gradlew assemble;
       ./gradlew check;
       fi
-  - if [ $TO_TEST == "FRONTEND" ]; then
+  - if [ $language == "node_js" ]; then
       cd frontend;
-      npm start;
+      npm run build;
       npm test;
       fi
