@@ -1,12 +1,18 @@
 package ioiobagiety.model.group;
 
 import ioiobagiety.model.user.AppUser;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "StudentsGroup")
+@Builder(toBuilder = true)
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@Setter(value = AccessLevel.PACKAGE)
+@Getter
 public class StudentsGroup {
 
     @Id
@@ -19,55 +25,4 @@ public class StudentsGroup {
     @OneToMany
     private List<AppUser> students;
 
-    public StudentsGroup () {
-
-    }
-
-    public Long getId () {
-        return id;
-    }
-
-    public void setId (Long id) {
-        this.id = id;
-    }
-
-    public String getName () {
-        return name;
-    }
-
-    public void setName (String name) {
-        this.name = name;
-    }
-
-    public String getFieldOfStudy () {
-        return fieldOfStudy;
-    }
-
-    public void setFieldOfStudy (String fieldOfStudy) {
-        this.fieldOfStudy = fieldOfStudy;
-    }
-
-    public String getYearOfStudy () {
-        return yearOfStudy;
-    }
-
-    public void setYearOfStudy (String yearOfStudy) {
-        this.yearOfStudy = yearOfStudy;
-    }
-
-    public CourseType getCourseType () {
-        return courseType;
-    }
-
-    public void setCourseType (CourseType courseType) {
-        this.courseType = courseType;
-    }
-
-    public List<AppUser> getStudents () {
-        return students;
-    }
-
-    public void setStudents (List<AppUser> students) {
-        this.students = students;
-    }
 }

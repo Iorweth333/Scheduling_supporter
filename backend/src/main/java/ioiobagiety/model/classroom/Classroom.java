@@ -1,9 +1,16 @@
 package ioiobagiety.model.classroom;
 
+import lombok.*;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "Classroom")
+@Builder(toBuilder = true)
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@Setter(value = AccessLevel.PACKAGE)
+@Getter
 public class Classroom {
 
     @Id
@@ -13,39 +20,4 @@ public class Classroom {
     private String building;
     private ClasroomType clasroomType;
 
-    public Classroom() {
-
-    }
-
-    public Long getId () {
-        return id;
-    }
-
-    public void setId (Long id) {
-        this.id = id;
-    }
-
-    public String getNumber () {
-        return number;
-    }
-
-    public void setNumber (String number) {
-        this.number = number;
-    }
-
-    public String getBuilding () {
-        return building;
-    }
-
-    public void setBuilding (String building) {
-        this.building = building;
-    }
-
-    public ClasroomType getClasroomType () {
-        return clasroomType;
-    }
-
-    public void setClasroomType (ClasroomType clasroomType) {
-        this.clasroomType = clasroomType;
-    }
 }
