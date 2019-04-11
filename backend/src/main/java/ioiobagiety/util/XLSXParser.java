@@ -1,19 +1,21 @@
 package ioiobagiety.util;
 
+import ioiobagiety.exception.XLSXParseException;
 import ioiobagiety.model.classes.Lesson;
 import ioiobagiety.model.classes.Subject;
 import ioiobagiety.model.classroom.Classroom;
+import ioiobagiety.model.group.StudentsGroup;
 import ioiobagiety.model.user.AppUser;
 import ioiobagiety.model.user.UserType;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.web.multipart.MultipartException;
+import org.jooq.lambda.Unchecked;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,143 +23,123 @@ import java.util.*;
 
 public class XLSXParser {
 
-    public ArrayList<Lesson> parseXLSX (MultipartFile file) throws MultipartException {
+    private Map<String, Subject> subjects = new HashMap<>();
+    private Map<String, Classroom> classrooms = new HashMap<>();
+    private Map<String, AppUser> lecturers = new HashMap<>();
+    private Map<String, StudentsGroup> groups = new HashMap<>();
+    private List<Lesson> lessons = new LinkedList<>();
+
+    public XLSXParser (MultipartFile file) throws XLSXParseException {
         try {
             XSSFWorkbook offices = new XSSFWorkbook(file.getInputStream());
-            XSSFSheet worksheet = offices.getSheetAt(0);
-
-            XLSXParser parser = new XLSXParser();
-
-            return parser.parseSheet(worksheet);
-        } catch (Exception e) {
-            throw new MultipartException("Constraints Violated");
+            Iterator<Sheet> worksheets = offices.sheetIterator();
+            worksheets.forEachRemaining(Unchecked.consumer(this::parseSheet));
+        } catch (Exception ex){
+            throw new XLSXParseException("Could not parse " + file.getOriginalFilename(), ex);
         }
     }
 
-    public ArrayList<Lesson> parseSheet (Sheet worksheet) throws ParseException {
-        String schedule_name = worksheet.getSheetName();
-        Map<String, Subject> subjects = getSubjects(worksheet);
-        Map<String, Classroom> classrooms = getClassrooms(worksheet);
-        Map<String, AppUser> lecturers = getLecturers(worksheet);
+    public Collection<Subject> getSubjects () {
+        return subjects.values();
+    }
 
-        Iterator<Row> rows = worksheet.rowIterator();
-        rows.next();
+    public Collection<Classroom> getClassrooms () {
+        return classrooms.values();
+    }
 
-        ArrayList<Lesson> lessons = new ArrayList<>();
+    public Collection<AppUser> getLecturers () {
+        return lecturers.values();
+    }
 
-        int meetingNumber = 1;
-        while (rows.hasNext()) {
-            Row row = rows.next();
-            if (row.getLastCellNum() % 3 == 0) {
-                meetingNumber = parseMeetingNumber(row, meetingNumber);
-                Date date = parseDate(row);
-                Time startsAt = parseStartTime(row);
-                Time endsAt = parseEndsTime(row);
+    public Collection<StudentsGroup> getGroups () {
+        return groups.values();
+    }
 
-                for (int i = 1; COLUMN.SUBJECT.value(i) < row.getLastCellNum(); i++) {
-                    if (validCell(row, COLUMN.SUBJECT.value(i))) {
-                        String subject = parseSubject(row, i);
-                        String classroom = parseClassroom(row, i);
-                        String lecturer = String.join(" ", parseLecturer(row, i));
-                        Lesson lesson = new Lesson();
-                        lesson.setScheduleName(schedule_name);
-                        lesson.setMeetingNumber(meetingNumber);
-                        lesson.setDate(date);
-                        lesson.setStartsAt(startsAt);
-                        lesson.setEndsAt(endsAt);
-                        lesson.setSubject(subjects.get(subject));
-                        lesson.setClassroom(classrooms.get(classroom));
-                        lesson.setLecturer(lecturers.get(lecturer));
-                        lessons.add(lesson);
-                    }
-                }
-            }
-        }
-
+    public Collection<Lesson> getLessons () {
         return lessons;
     }
 
-    private ArrayList<String> getHeaders (Sheet worksheet) {
-        Row headerRow = worksheet.getRow(0);
-        ArrayList<String> headers = new ArrayList<>();
-        Iterator<Cell> cells = headerRow.cellIterator();
-        while (cells.hasNext()) {
-            headers.add(cells.next().getStringCellValue());
-        }
-        return headers;
+    private void parseSheet (Sheet worksheet) throws ParseException {
+
+        Iterator<Row> rows = worksheet.rowIterator();
+        rows.next();
+        rows.forEachRemaining(row -> {
+            addGroup(row);
+            addSubject(row);
+            addClassroom(row);
+            addLecturer(row);
+        });
+
+        addLessons(worksheet);
     }
 
-    private Map<String, Subject> getSubjects (Sheet worksheet) {
-        HashMap<String, Subject> subjects = new HashMap<>();
+    private void addLessons (Sheet worksheet) throws ParseException {
+        String scheduleName = worksheet.getSheetName();
         Iterator<Row> rows = worksheet.rowIterator();
         rows.next();
 
+        int meetingNumber = 0;
         while (rows.hasNext()) {
             Row row = rows.next();
-            for (int i = 1; COLUMN.SUBJECT.value(i) < row.getLastCellNum(); i++) {
-                if (validCell(row, COLUMN.SUBJECT.value(i))) {
-                    String name = parseSubject(row, i);
-                    if (!subjects.containsKey(name)) {
-                        Subject subject = new Subject();
-                        subject.setName(name);
-                        subjects.put(name, subject);
-                    }
-                }
-            }
-        }
+            meetingNumber = parseMeetingNumber(row, meetingNumber);
+            Lesson lesson = Lesson.builder()
+                                  .scheduleName(scheduleName)
+                                  .meetingNumber(meetingNumber)
+                                  .date(parseDate(row))
+                                  .startsAt(parseStartTime(row))
+                                  .endsAt(parseEndTime(row))
+                                  .studentsGroup(groups.get(parseGroup(row)))
+                                  .subject(subjects.get(parseSubject(row)))
+                                  .classroom(classrooms.get(parseClassroom(row)))
+                                  .lecturer(lecturers.get(parseLecturer(row)))
+                                  .build();
 
-        return subjects;
+            lessons.add(lesson);
+        }
     }
 
-    private Map<String, Classroom> getClassrooms (Sheet worksheet) {
-        HashMap<String, Classroom> classrooms = new HashMap<>();
-        Iterator<Row> rows = worksheet.rowIterator();
-        rows.next();
+    private void addSubject (Row row) {
+        String name = parseSubject(row);
+        Subject subject = Subject.builder()
+                                 .name(name)
+                                 .build();
+        subjects.putIfAbsent(name, subject);
 
-        while (rows.hasNext()) {
-            Row row = rows.next();
-            for (int i = 1; COLUMN.CLASSROOM.value(i) < row.getLastCellNum(); i++) {
-                if (validCell(row, COLUMN.CLASSROOM.value(i))) {
-                    String number = parseClassroom(row, i);
-                    if (!classrooms.containsKey(number)) {
-                        Classroom classroom = new Classroom();
-                        classroom.setNumber(number);
-                        classrooms.put(number, classroom);
-                    }
-                }
-            }
-        }
-
-        return classrooms;
     }
 
-    private Map<String, AppUser> getLecturers (Sheet worksheet) {
-        HashMap<String, AppUser> lecturers = new HashMap<>();
-        Iterator<Row> rows = worksheet.rowIterator();
-        rows.next();
+    private void addClassroom (Row row) {
+        String number = parseClassroom(row);
+        Classroom classroom = Classroom.builder()
+                                       .number(number)
+                                       .build();
+        classrooms.putIfAbsent(number, classroom);
 
-        while (rows.hasNext()) {
-            Row row = rows.next();
-            for (int i = 1; COLUMN.LECTURER.value(i) < row.getLastCellNum(); i++) {
-                if (validCell(row, COLUMN.LECTURER.value(i))) {
-                    String[] name = parseLecturer(row, i);
-                    String fullName = String.join(" ", name);
-                    if (!lecturers.containsKey(fullName)) {
-                        AppUser lecturer = new AppUser();
-                        lecturer.setUserType(UserType.lecturer);
-                        lecturer.setName(name[0]);
-                        lecturer.setSurname(name[1]);
-                        lecturers.put(fullName, lecturer);
-                    }
-                }
-            }
-        }
+    }
 
-        return lecturers;
+    private void addLecturer (Row row) {
+        String fullName = parseLecturer(row);
+        String[] name = fullName.split("\\s+");
+        AppUser lecturer = AppUser.builder()
+                                  .userType(UserType.lecturer)
+                                  .name(name[0])
+                                  .surname(name[1])
+                                  .build();
+        lecturers.putIfAbsent(fullName, lecturer);
+    }
+
+    private void addGroup (Row row) {
+        String name = parseGroup(row);
+        StudentsGroup group = StudentsGroup.builder()
+                                           .name(name)
+                                           .build();
+
+        groups.putIfAbsent(name, group);
+
+
     }
 
     private int parseMeetingNumber (Row row, int lastNumber) {
-        Cell cell = row.getCell(COLUMN.MEETING.value());
+        Cell cell = row.getCell(Column.MEETING.ordinal());
         if (cell.getCellTypeEnum() == CellType.NUMERIC) {
             return (int) cell.getNumericCellValue();
         }
@@ -165,62 +147,40 @@ public class XLSXParser {
     }
 
     private Date parseDate (Row row) throws ParseException {
-        String date = row.getCell(COLUMN.DATE.value()).getStringCellValue();
+        String date = row.getCell(Column.DATE.ordinal()).getStringCellValue();
         return new SimpleDateFormat("dd.MM.yyyy").parse(date);
     }
 
     private Time parseStartTime (Row row) throws ParseException {
-        String startAt = row.getCell(COLUMN.TIME.value()).getStringCellValue().split("-")[0];
+        String startAt = row.getCell(Column.TIME.ordinal()).getStringCellValue().split("-")[0];
         Date startDate = new SimpleDateFormat("HH:mm").parse(startAt);
         return new Time(startDate.getTime());
     }
 
-    private Time parseEndsTime (Row row) throws ParseException {
-        String endsAt = row.getCell(COLUMN.TIME.value()).getStringCellValue().split("-")[1];
+    private Time parseEndTime (Row row) throws ParseException {
+        String endsAt = row.getCell(Column.TIME.ordinal()).getStringCellValue().split("-")[1];
         Date endDate = new SimpleDateFormat("HH:mm").parse(endsAt);
         return new Time(endDate.getTime());
     }
 
-    private String parseSubject (Row row, int group) {
-        return row.getCell(COLUMN.SUBJECT.value(group)).getStringCellValue();
+    private String parseGroup (Row row) {
+        return row.getCell(Column.GROUP.ordinal()).getStringCellValue();
     }
 
-    private String parseClassroom (Row row, int group) {
-        return row.getCell(COLUMN.CLASSROOM.value(group)).getStringCellValue();
+    private String parseSubject (Row row) {
+        return row.getCell(Column.SUBJECT.ordinal()).getStringCellValue();
     }
 
-    private String[] parseLecturer (Row row, int group) {
-        return row.getCell(COLUMN.LECTURER.value(group)).getStringCellValue().split(" ");
+    private String parseClassroom (Row row) {
+        return row.getCell(Column.CLASSROOM.ordinal()).getStringCellValue();
     }
 
-    private boolean validCell (Row row, int i) {
-        return row.getCell(i, Row.MissingCellPolicy.RETURN_NULL_AND_BLANK).getCellTypeEnum() != CellType.BLANK;
+    private String parseLecturer (Row row) {
+        return row.getCell(Column.LECTURER.ordinal()).getStringCellValue();
     }
 
-    private enum COLUMN {
-        MEETING, DATE, TIME, SUBJECT, CLASSROOM, LECTURER;
-
-        public int value () {
-            return value(1);
-        }
-
-        public int value (int group) {
-            switch (this) {
-                case MEETING:
-                    return 0;
-                case DATE:
-                    return 1;
-                case TIME:
-                    return 2;
-                case SUBJECT:
-                    return group * 3;
-                case CLASSROOM:
-                    return group * 3 + 1;
-                case LECTURER:
-                    return group * 3 + 2;
-                default:
-                    return 0;
-            }
-        }
+    private enum Column {
+        MEETING, DATE, TIME, GROUP, SUBJECT, CLASSROOM, LECTURER
     }
+
 }
