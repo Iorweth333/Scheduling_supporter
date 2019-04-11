@@ -31,12 +31,12 @@ public class FileUploadController {
     private SaveContentsController saveContentsController;
 
     @CrossOrigin(maxAge = 3600)
-    @PostMapping("/uploadFile")
+    @PostMapping("/files")
     public UploadFileResponse uploadFile (@RequestParam("file") MultipartFile file) {
         String fileName = fileStorageService.storeFile(file);
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                                                            .path("/downloadFile/")
+                                                            .path("/files/")
                                                             .path(fileName)
                                                             .toUriString();
 
@@ -45,14 +45,14 @@ public class FileUploadController {
         return new UploadFileResponse(fileName, fileDownloadUri, file.getContentType(), file.getSize());
     }
 
-    @PostMapping("/uploadMultipleFiles")
+    @PostMapping("/files/multiple")
     public List<UploadFileResponse> uploadMultipleFiles (@RequestParam("files") MultipartFile[] files) {
         return Arrays.stream(files)
                      .map(this::uploadFile)
                      .collect(Collectors.toList());
     }
 
-    @GetMapping("/downloadFile/{fileName:.+}")
+    @GetMapping("/files/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile (@PathVariable String fileName, HttpServletRequest request) {
         Resource resource = fileStorageService.loadFileAsResource(fileName);
 
