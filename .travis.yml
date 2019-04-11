@@ -7,17 +7,15 @@ cache:
     - $HOME/backend/.gradle/wrapper/
     - $HOME/frontend/node_modules
 env:
-  - DB=orientDB
-before_install:
-  -
+  - DB = orientDB
+  - CI = true
+
 
 matrix:
   fast_finish: true
   include:
     - node_js:
-      env:
-      - TO_TEST=FRONTEND
-      - CI = true
+      env: TO_TEST=FRONTEND
     - java:
       env: TO_TEST=BACKEND
 
