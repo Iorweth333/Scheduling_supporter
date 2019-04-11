@@ -15,7 +15,9 @@ matrix:
   fast_finish: true
   include:
     - node_js:
-      env: TO_TEST=FRONTEND
+      env:
+      - TO_TEST=FRONTEND
+      - CI = true
     - java:
       env: TO_TEST=BACKEND
 
