@@ -29,7 +29,6 @@ public class XLSFileExportController {
     public ResponseEntity<Resource> getLessons() throws IOException {
         List<Lesson> lessons = lessonService.getAll();
         File file = XLSFileExportProvider.provideFile(lessons);
-        System.out.println(lessons.get(0).toString());
         Path path = Paths.get(file.getAbsolutePath());
         ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
 
