@@ -8,7 +8,7 @@ import java.util.List;
 public interface LessonService {
     Lesson get(Long id) throws ResourceNotFoundException;
 
-    Lesson get(String name) throws ResourceNotFoundException;
+    List<Lesson> get(String name) throws ResourceNotFoundException;
 
     List<Lesson> getAll() throws ResourceNotFoundException;
 }

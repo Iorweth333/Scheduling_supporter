@@ -17,8 +17,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/schedule")
-public class ScheduleFileProvider {
-    private Logger logger = LoggerFactory.getLogger(ScheduleFileProvider.class);
+public class ScheduleExportController {
+    private Logger logger = LoggerFactory.getLogger(ScheduleExportController.class);
 
     @Autowired
     private LessonService lessonService;
@@ -49,13 +49,11 @@ public class ScheduleFileProvider {
 
     @RequestMapping(value = "/name/{name}", method = RequestMethod.GET)
     public ResponseEntity<String> getFromName(@PathVariable("name") String name) {
-        Lesson lesson = lessonService.get(name);
-        if (lesson == null) {
+        List<Lesson> lessons = lessonService.get(name);
+        if (lessons.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            return new ResponseEntity<>(gson.toJson(lesson), HttpStatus.OK);
+            return new ResponseEntity<>(gson.toJson(lessons), HttpStatus.OK);
         }
     }
-
-
 }
