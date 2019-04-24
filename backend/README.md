@@ -18,9 +18,9 @@ gradle run
 ```
 ### Import endpoints
 ```sh
-localhost:8080/uploadFile
-localhost:8080/uploadMultipleFiles
-localhost:8080/downloadFile/{filename}
+localhost:8080/files
+localhost:8080/filse/multiple
+localhost:8080/files/{filename}
 ```
 While using ```uploadFile``` i ```uploadMultipleFiles``` you should add file(s) in body.
 #####Response message

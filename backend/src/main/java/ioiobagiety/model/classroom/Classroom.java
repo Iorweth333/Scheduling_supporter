@@ -18,6 +18,6 @@ public class Classroom {
     private Long id;
     private String number;
     private String building;
-    private ClasroomType clasroomType;
+    private ClassroomType classroomType;
 
 }

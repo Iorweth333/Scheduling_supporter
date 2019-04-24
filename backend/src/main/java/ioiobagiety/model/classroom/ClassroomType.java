@@ -1,6 +1,6 @@
 package ioiobagiety.model.classroom;
 
-public enum ClasroomType {
+public enum ClassroomType {
 
     lectureHall,
     classroom,
