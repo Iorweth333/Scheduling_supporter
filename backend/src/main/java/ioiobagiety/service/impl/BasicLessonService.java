@@ -18,14 +18,17 @@ public class BasicLessonService implements LessonService {
 
     @Transactional
     public Lesson get(Long id) {
-        Lesson lesson = lessonRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lesson not found"));
-        return lesson;
+        return lessonRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lesson not found"));
     }
 
     @Transactional
-    public Lesson get(String name) {
-        Lesson lesson = lessonRepository.findByScheduleName(name).orElseThrow(() -> new ResourceNotFoundException("Lesson not Found"));
-        return lesson;
+    public List<Lesson> get(String name) {
+        List<Lesson> lessons = lessonRepository.findByScheduleName(name);
+        if (lessons.size() > 0) {
+            return lessons;
+        } else {
+            throw new ResourceNotFoundException("No lessons found");
+        }
     }
 
     @Transactional

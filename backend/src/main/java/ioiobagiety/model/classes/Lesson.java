@@ -29,87 +29,94 @@ public class Lesson {
     @OneToOne
     private StudentsGroup studentsGroup;
 
-    public Lesson () {
+    public Lesson() {
 
     }
 
-    public Long getId () {
+    public Long getId() {
         return id;
     }
 
-    public void setId (Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Date getDate () {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate (Date date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
-    public Time getStartsAt () {
+    public Time getStartsAt() {
         return startsAt;
     }
 
-    public void setStartsAt (Time startsAt) {
+    public void setStartsAt(Time startsAt) {
         this.startsAt = startsAt;
     }
 
-    public Time getEndsAt () {
+    public Time getEndsAt() {
         return endsAt;
     }
 
-    public void setEndsAt (Time endsAt) {
+    public void setEndsAt(Time endsAt) {
         this.endsAt = endsAt;
     }
 
-    public Integer getMeetingNumber () {
+    public Integer getMeetingNumber() {
         return meetingNumber;
     }
 
-    public void setMeetingNumber (Integer meetingNumber) {
+    public void setMeetingNumber(Integer meetingNumber) {
         this.meetingNumber = meetingNumber;
     }
 
-    public String getScheduleName () {
+    public String getScheduleName() {
         return scheduleName;
     }
 
-    public void setScheduleName (String scheduleName) {
+    public void setScheduleName(String scheduleName) {
         this.scheduleName = scheduleName;
     }
 
-    public Subject getSubject () {
+    public Subject getSubject() {
         return subject;
     }
 
-    public void setSubject (Subject subject) {
+    public void setSubject(Subject subject) {
         this.subject = subject;
     }
 
-    public AppUser getLecturer () {
+    public AppUser getLecturer() {
         return lecturer;
     }
 
-    public void setLecturer (AppUser lecturer) {
+    public void setLecturer(AppUser lecturer) {
         this.lecturer = lecturer;
     }
 
-    public Classroom getClassroom () {
+    public Classroom getClassroom() {
         return classroom;
     }
 
-    public void setClassroom (Classroom classroom) {
+    public void setClassroom(Classroom classroom) {
         this.classroom = classroom;
     }
 
-    public StudentsGroup getStudentsGroup () {
+    public StudentsGroup getStudentsGroup() {
         return studentsGroup;
     }
 
-    public void setStudentsGroup (StudentsGroup studentsGroup) {
+    public void setStudentsGroup(StudentsGroup studentsGroup) {
         this.studentsGroup = studentsGroup;
+    }
+
+    @Override
+    public java.lang.String toString() {
+        return "ScheduleName: " + getScheduleName() + " Date: " + getDate() + " Starts: " + getStartsAt() +
+                " Ends: " + getEndsAt() + " Meeting: " + getMeetingNumber() + " Subject: " + getSubject() +
+                " Lecturer: " + getLecturer() + " Classroom: " + getClassroom() + " Group: " + getStudentsGroup();
     }
 }

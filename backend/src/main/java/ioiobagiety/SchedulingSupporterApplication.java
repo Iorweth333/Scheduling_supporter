@@ -12,5 +12,6 @@ public class SchedulingSupporterApplication {
     public static void main(String[] args) {
 
         SpringApplication.run(SchedulingSupporterApplication.class, args);
+
     }
 }
