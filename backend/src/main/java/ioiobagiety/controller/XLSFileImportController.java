@@ -33,7 +33,7 @@ public class XLSFileImportController {
         String fileName = fileStorageService.storeFile(file);
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/files/")
+                .path("/schedule/file/")
                 .path(fileName)
                 .toUriString();
 
