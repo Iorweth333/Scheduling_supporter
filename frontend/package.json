@@ -4,18 +4,22 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "bootstrap": "^4.3.1",
     "fullcalendar-reactwrapper": "^1.0.7",
     "interactjs": "^1.4.0-rc.9",
     "moment": "^2.24.0",
     "react": "^16.8.6",
+    "react-bootstrap": "^1.0.0-beta.8",
     "react-calendar-timeline": "^0.23.1",
     "react-dom": "^16.8.6",
     "react-redux": "^6.0.1",
     "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.8",
+    "react-spreadsheet": "^0.4.27",
     "redux": "^4.0.1",
     "redux-form": "^8.1.0",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "xlsx": "^0.14.2"
   },
   "scripts": {
     "start": "react-scripts start",
