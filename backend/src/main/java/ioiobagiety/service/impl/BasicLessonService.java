@@ -1,0 +1,43 @@
+package ioiobagiety.service.impl;
+
+import ioiobagiety.exception.ResourceNotFoundException;
+import ioiobagiety.model.classes.Lesson;
+import ioiobagiety.repository.LessonRepository;
+import ioiobagiety.service.LessonService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.List;
+
+@Service
+public class BasicLessonService implements LessonService {
+
+    @Autowired
+    private LessonRepository lessonRepository;
+
+    @Transactional
+    public Lesson get(Long id) {
+        return lessonRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lesson not found"));
+    }
+
+    @Transactional
+    public List<Lesson> get(String name) {
+        List<Lesson> lessons = lessonRepository.findByScheduleName(name);
+        if (lessons.size() > 0) {
+            return lessons;
+        } else {
+            throw new ResourceNotFoundException("No lessons found");
+        }
+    }
+
+    @Transactional
+    public List<Lesson> getAll() {
+        List<Lesson> lessons = lessonRepository.findAll();
+        if (lessons.size() > 0) {
+            return lessons;
+        } else {
+            throw new ResourceNotFoundException("No lessons found");
+        }
+    }
+}
