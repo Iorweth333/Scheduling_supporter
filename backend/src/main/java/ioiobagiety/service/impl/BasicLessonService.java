@@ -17,6 +17,11 @@ public class BasicLessonService implements LessonService {
     private LessonRepository lessonRepository;
 
     @Transactional
+    public Lesson create(Lesson lesson) {
+        return lessonRepository.save(lesson);
+    }
+
+    @Transactional
     public Lesson get(Long id) {
         return lessonRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lesson not found"));
     }

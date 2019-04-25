@@ -18,13 +18,12 @@ gradle run
 ```
 ### Import endpoints
 ```sh
-localhost:8080/uploadFile
-localhost:8080/uploadMultipleFiles
-localhost:8080/downloadFile/{filename}
+localhost:8080/schedule/file
+localhost:8080/schedule/files
 ```
 Required keys for:  
- ```uploadFile``` -> ```file```  
- ```uploadMultipleFiles``` -> ```files```
+ ```file``` -> ```file```  
+ ```files``` -> ```files```
 #####Response message
 ```json
 {

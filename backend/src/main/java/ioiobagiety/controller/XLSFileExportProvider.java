@@ -1,8 +1,8 @@
 package ioiobagiety.controller;
 
 import ioiobagiety.model.classes.Lesson;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -15,7 +15,7 @@ public class XLSFileExportProvider {
     public static final String PATH = "uploads/" + FILENAME;
 
     public static void provideFile(List<Lesson> lessons) throws IOException {
-        Workbook workbook = new HSSFWorkbook();
+        Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Schedule");
         createHeader(workbook, sheet);
         fillSchedule(workbook, sheet, lessons);
