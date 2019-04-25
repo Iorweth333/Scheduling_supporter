@@ -22,7 +22,9 @@ localhost:8080/files
 localhost:8080/filse/multiple
 localhost:8080/files/{filename}
 ```
-While using ```uploadFile``` i ```uploadMultipleFiles``` you should add file(s) in body.
+Required keys for:  
+ ```uploadFile``` -> ```file```  
+ ```uploadMultipleFiles``` -> ```files```
 #####Response message
 ```json
 {
@@ -31,6 +33,19 @@ While using ```uploadFile``` i ```uploadMultipleFiles``` you should add file(s) 
     "fileType": "filetype",
     "size": 123
 }
+```
+### Export endpoints
+Endpoints returning schedule in JSON:
+```sh
+localhost:8080/schedule                 -- all lessons
+localhost:8080/schedule/{id}            -- specific lesson
+localhost:8080/schedule/name/{name}     -- specific schedule
+```
+
+Endpoints returning schedule in XLS file:
+```sh
+localhost:8080/schedule/file            -- all lessons
+localhost:8080/schedule/file/{name}     -- specific schedule
 ```
 ### Test in-memory db
 H2 & Hibernate
