@@ -37,16 +37,6 @@ public class ScheduleExportController {
         }
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<String> getForum(@PathVariable("id") Long id) {
-        Lesson lesson = lessonService.get(id);
-        if (lesson == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>(gson.toJson(lesson), HttpStatus.OK);
-        }
-    }
-
     @RequestMapping(value = "/name/{name}", method = RequestMethod.GET)
     public ResponseEntity<String> getFromName(@PathVariable("name") String name) {
         List<Lesson> lessons = lessonService.get(name);
