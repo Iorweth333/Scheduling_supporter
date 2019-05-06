@@ -1,5 +1,5 @@
 
-public interface HelloIOBagietyService {
+public interface ConflictsFinderService {
 
     List<Conflicts> getAll() throws ResourceNotFoundException;
 
