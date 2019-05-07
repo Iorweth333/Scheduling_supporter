@@ -3,8 +3,7 @@ import moment from "moment";
 import 'react-calendar-timeline/lib/Timeline.css'
 import Timeline from "react-calendar-timeline";
 import _ from "lodash";
-import {fetchLessons} from "../actions";
-import {connect} from "react-redux";
+
 
 var keys = {
     groupIdKey: "id",
@@ -23,7 +22,7 @@ const DAY = 86400000;
 const MONTH = 2678400000;
 const YEAR = 31536000000;
 
-class SchedulerCalendar extends Component {
+export default class SchedulerCalendar_legacy extends Component {
 
     parseLecturers(lecturers){
         return _.uniqBy(lecturers, 'id').map( lecturer =>{
@@ -33,25 +32,6 @@ class SchedulerCalendar extends Component {
                     parent: 0
             }
         });
-    }
-
-    newGroups(groups, openGroups){
-        groups.push({ id: 0, title: 'CS', root: true });
-        return groups.filter(g => g.root || openGroups[g.parent])
-                .map(group => {
-                    return Object.assign({}, group, {
-                        title: group.root ? (
-                            <div
-                                onClick={() => this.toggleGroup(parseInt(group.id))}
-                                style={{cursor: "pointer"}}
-                            >
-                                {openGroups[parseInt(group.id)] ? "[-]" : "[+]"} {group.title}
-                            </div>
-                        ) : (
-                            <div style={{paddingLeft: 20}}>{group.title}</div>
-                        )
-                    });
-                });
     }
 
     parseLessons(data){
@@ -66,19 +46,17 @@ class SchedulerCalendar extends Component {
             }
         })
     }
-
-    componentDidMount() {
-        if(this.props.loading){
-            this.props.fetchLessons();
-        }
-    }
-
     constructor(props) {
         super(props);
+        let groups = this.parseLecturers(this.props.items.map(({ lecturer }) => lecturer));
+        groups.push({ id: 0, title: 'CS', root: true });
+        console.log(groups);
+        let lessons = this.parseLessons(this.props.items);
+
 
         this.state = {
-            groups: null,
-            items: null,
+            groups: groups,
+            items: lessons,
             defaultTimeStart: moment().startOf("day").toDate(),
             defaultTimeEnd: moment().startOf("day").add(1, "day").toDate(),
             openGroups: {},
@@ -92,8 +70,6 @@ class SchedulerCalendar extends Component {
         this.handleNextDay = this.handleNextDay.bind(this);
         this.handlePrevYear = this.handlePrevYear.bind(this);
         this.handleNextYear = this.handleNextYear.bind(this);
-
-
     }
 
     handleTimeChange(visibleTimeStart, visibleTimeEnd){
@@ -129,6 +105,8 @@ class SchedulerCalendar extends Component {
                     : item
             )
         });
+
+        console.log("Moved", itemId, dragTime, newGroupOrder);
     };
 
     handleItemResize = (itemId, time, edge) => {
@@ -144,6 +122,8 @@ class SchedulerCalendar extends Component {
                     : item
             )
         });
+
+        console.log("Resized", itemId, time, edge);
     };
 
     handlePrevDay(){
@@ -180,6 +160,8 @@ class SchedulerCalendar extends Component {
 
     render() {
         const {
+            groups,
+            items,
             defaultTimeStart,
             defaultTimeEnd,
             openGroups,
@@ -187,15 +169,22 @@ class SchedulerCalendar extends Component {
             visibleTimeEnd
         } = this.state;
 
-        const { error, loading, lessons } = this.props;
-
-        if (error) {
-            return <div>Error! {error.message}</div>;
-        }
-
-        if (loading) {
-            return <div>Loading...</div>;
-        }
+       const newGroups = groups
+            .filter(g => g.root || openGroups[g.parent])
+            .map(group => {
+                return Object.assign({}, group, {
+                    title: group.root ? (
+                        <div
+                            onClick={() => this.toggleGroup(parseInt(group.id))}
+                            style={{ cursor: "pointer" }}
+                        >
+                            {openGroups[parseInt(group.id)] ? "[-]" : "[+]"} {group.title}
+                        </div>
+                    ) : (
+                        <div style={{ paddingLeft: 20 }}>{group.title}</div>
+                    )
+                });
+            });
 
         return (
             <div>
@@ -206,8 +195,8 @@ class SchedulerCalendar extends Component {
                 <button onClick={this.handlePrevYear}>prevYear</button>
                 <button onClick={this.handleNextYear}>nextYear</button>
                 <Timeline
-                    groups={this.newGroups(this.parseLecturers(lessons.map(({ lecturer }) => lecturer)), openGroups)}
-                    items={this.parseLessons(lessons)}
+                    groups={newGroups}
+                    items={items}
                     keys={keys}
                     fixedHeader="fixed"
                     sidebarWidth={250}
@@ -232,14 +221,3 @@ class SchedulerCalendar extends Component {
         );
     }
 }
-
-
-function mapStateToProps(state){
-    return{
-        loading: state.lessons.loading,
-        error: state.lessons.error,
-        lessons: state.lessons.lessons
-    };
-}
-
-export default connect(mapStateToProps, {fetchLessons})(SchedulerCalendar);

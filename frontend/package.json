@@ -7,6 +7,7 @@
     "bootstrap": "^4.3.1",
     "fullcalendar-reactwrapper": "^1.0.7",
     "interactjs": "^1.4.0-rc.9",
+    "lodash": "^4.17.11",
     "moment": "^2.24.0",
     "react": "^16.8.6",
     "react-bootstrap": "^1.0.0-beta.8",
@@ -18,8 +19,10 @@
     "react-spreadsheet": "^0.4.27",
     "redux": "^4.0.1",
     "redux-form": "^8.1.0",
+    "redux-promise": "^0.6.0",
     "redux-thunk": "^2.3.0",
-    "xlsx": "^0.14.2"
+    "xlsx": "^0.14.3",
+    "xlsx-style": "^0.8.13"
   },
   "scripts": {
     "start": "react-scripts start",
