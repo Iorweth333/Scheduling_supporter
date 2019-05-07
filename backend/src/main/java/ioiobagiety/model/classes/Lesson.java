@@ -6,7 +6,7 @@ import ioiobagiety.model.user.AppUser;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Time;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Entity
@@ -22,8 +22,8 @@ public class Lesson {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Date date;
-    private Time startsAt;
-    private Time endsAt;
+    private LocalTime startsAt;
+    private LocalTime endsAt;
     private Integer meetingNumber;
     private String scheduleName;
     @OneToOne(cascade = {CascadeType.ALL})
@@ -39,11 +39,11 @@ public class Lesson {
         return id;
     }
 
-    public Time getStartsAt(){
+    public LocalTime getStartsAt(){
         return startsAt;
     }
 
-    public Time getEndsAt(){
+    public LocalTime getEndsAt(){
         return endsAt;
     }
 

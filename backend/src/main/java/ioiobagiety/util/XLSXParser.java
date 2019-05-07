@@ -16,7 +16,7 @@ import org.jooq.lambda.Unchecked;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.sql.Time;
+import java.time.LocalTime;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -151,16 +151,16 @@ public class XLSXParser {
         return new SimpleDateFormat("dd.MM.yyyy").parse(date);
     }
 
-    private Time parseStartTime (Row row) throws ParseException {
+    private LocalTime parseStartTime (Row row) {
         String startAt = row.getCell(Column.TIME.ordinal()).getStringCellValue().split("-")[0];
-        Date startDate = new SimpleDateFormat("HH:mm").parse(startAt);
-        return new Time(startDate.getTime());
+        LocalTime startTime = LocalTime.parse(startAt);
+        return startTime;
     }
 
-    private Time parseEndTime (Row row) throws ParseException {
+    private LocalTime parseEndTime (Row row) {
         String endsAt = row.getCell(Column.TIME.ordinal()).getStringCellValue().split("-")[1];
-        Date endDate = new SimpleDateFormat("HH:mm").parse(endsAt);
-        return new Time(endDate.getTime());
+        LocalTime endTime = LocalTime.parse(endsAt);
+        return endTime;
     }
 
     private String parseGroup (Row row) {
