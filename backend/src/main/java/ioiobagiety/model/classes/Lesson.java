@@ -35,4 +35,28 @@ public class Lesson {
     @OneToOne(cascade = {CascadeType.ALL})
     private StudentsGroup studentsGroup;
 
+    public Long getId() {
+        return id;
+    }
+
+    public Time getStartsAt(){
+        return startsAt;
+    }
+
+    public Time getEndsAt(){
+        return endsAt;
+    }
+
+    public AppUser getLecturer() {
+        return lecturer;
+    }
+
+    public StudentsGroup getStudentsGroup() {
+        return studentsGroup;
+    }
+
+    public Classroom getClassroom() {
+        return classroom;
+    }
+
 }
