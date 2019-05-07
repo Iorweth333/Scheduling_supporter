@@ -50,7 +50,7 @@ class SheetJSApp extends Component {
                         <DataInput handleFile={this.handleFile} />
                     </div></div>
                     <div className="row"><div className="col-xs-12">
-                        <button disabled={!this.state.data.length} className="btn btn-success" onClick={this.exportFile}>Export</button>
+                        <button disabled={!this.state.data.length} className="btn btn-success" onClick={this.exportFile}>Upload</button>
                     </div></div>
                     <div className="row"><div className="col-xs-12">
                         <OutTable data={this.state.data} cols={this.state.cols} />
