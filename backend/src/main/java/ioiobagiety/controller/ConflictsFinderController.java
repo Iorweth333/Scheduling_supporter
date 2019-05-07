@@ -21,7 +21,7 @@ public class ConflictsFinderController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<String> ConflictsList() {
 
-        List<Conflicts> conflicts = ConflictsFinderService.getAll();
+        List<?> conflicts = ConflictsFinderService.getAll();
 
         if (conflicts.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
