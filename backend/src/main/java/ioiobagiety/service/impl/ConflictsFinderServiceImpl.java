@@ -31,30 +31,30 @@ public class ConflictsFinderServiceImpl implements ConflictsFinderService {
     }
 
     @Transactional
-    public List<String> getAll(){
+    public List<String> getAllConflicts(){
         List dates = getDates();
         List<String> conflicts = new ArrayList<String>();
         for(Object day: dates){
             List lessons = getSingleDayLessons((Date) day);
             for(int i = 0; i < lessons.size(); i++){
                 for (int k = i+1; k < lessons.size(); k++) {
-                    Lesson l1 = (Lesson) lessons.get(i);
-                    Lesson l2 = (Lesson) lessons.get(k);
-                    Time sqll2start = l2.getStartsAt();
-                    LocalTime l2start = LocalTime.MIDNIGHT.plus(sqll2start.getTime(), ChronoUnit.MILLIS);
-                    Time sqll1end = l1.getEndsAt();
-                    LocalTime l1end = LocalTime.MIDNIGHT.plus(sqll1end.getTime(), ChronoUnit.MILLIS);
-                    if(l2start.isBefore(l1end)) {
-                        if(l1.getLecturer() == l2.getLecturer()) {
-                            String conflict = "Lecturer conflict! Lesson id1: " + l1.getId() + " Lesson id2: " + l2.getId();
+                    Lesson lesson1 = (Lesson) lessons.get(i);
+                    Lesson lesson2 = (Lesson) lessons.get(k);
+                    Time sqlLesson2Start = lesson2.getStartsAt();
+                    LocalTime lesson2start = LocalTime.MIDNIGHT.plus(sqlLesson2Start.getTime(), ChronoUnit.MILLIS);
+                    Time sqlLesson1End = lesson1.getEndsAt();
+                    LocalTime lesson1end = LocalTime.MIDNIGHT.plus(sqlLesson1End.getTime(), ChronoUnit.MILLIS);
+                    if(lesson2start.isBefore(lesson1end)) {
+                        if(lesson1.getLecturer() == lesson2.getLecturer()) {
+                            String conflict = "Lecturer conflict! Lesson id1: " + lesson1.getId() + " Lesson id2: " + lesson2.getId();
                             conflicts.add(conflict);
                         }
-                        if(l1.getStudentsGroup() == l2.getStudentsGroup()){
-                            String conflict = "Students Group conflict! Lesson id1: " + l1.getId() + " Lesson id2: " + l2.getId();
+                        if(lesson1.getStudentsGroup() == lesson2.getStudentsGroup()){
+                            String conflict = "Students Group conflict! Lesson id1: " + lesson1.getId() + " Lesson id2: " + lesson2.getId();
                             conflicts.add(conflict);
                         }
-                        if(l1.getClassroom() == l2.getClassroom()){
-                            String conflict = "Classroom conflict! Lesson id1: " + l1.getId() + "Lesson id2: " + l2.getId();
+                        if(lesson1.getClassroom() == lesson2.getClassroom()){
+                            String conflict = "Classroom conflict! Lesson id1: " + lesson1.getId() + "Lesson id2: " + lesson2.getId();
                             conflicts.add(conflict);
                         }
                     }
