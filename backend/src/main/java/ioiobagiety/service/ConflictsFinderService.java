@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface ConflictsFinderService {
 
-    List<?> getAll();
+    List<String> getAll();
 
 }

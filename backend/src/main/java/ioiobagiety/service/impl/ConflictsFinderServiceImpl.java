@@ -8,8 +8,11 @@ import ioiobagiety.repository.LessonRepository;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.time.temporal.ChronoUnit;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
+import java.sql.Time;
 
 @Service
 public class ConflictsFinderServiceImpl implements ConflictsFinderService {
@@ -28,26 +31,30 @@ public class ConflictsFinderServiceImpl implements ConflictsFinderService {
     }
 
     @Transactional
-    public List<?> getAll(){
+    public List<String> getAll(){
         List dates = getDates();
-        List<String> conflicts= new ArrayList<String>();
+        List<String> conflicts = new ArrayList<String>();
         for(Object day: dates){
             List lessons = getSingleDayLessons((Date) day);
             for(int i = 0; i < lessons.size(); i++){
-                for (int k = ++i; k < lessons.size(); k++) {
+                for (int k = i+1; k < lessons.size(); k++) {
                     Lesson l1 = (Lesson) lessons.get(i);
                     Lesson l2 = (Lesson) lessons.get(k);
-                    if(l2.getStartsAt().isBefore(l1.getEndsAt())) {
+                    Time sqll2start = l2.getStartsAt();
+                    LocalTime l2start = LocalTime.MIDNIGHT.plus(sqll2start.getTime(), ChronoUnit.MILLIS);
+                    Time sqll1end = l1.getEndsAt();
+                    LocalTime l1end = LocalTime.MIDNIGHT.plus(sqll1end.getTime(), ChronoUnit.MILLIS);
+                    if(l2start.isBefore(l1end)) {
                         if(l1.getLecturer() == l2.getLecturer()) {
-                            String conflict = "Lecturer conflict! Lesson id1: " + l1.getId() + "Lesson id2:" + l2.getId();
+                            String conflict = "Lecturer conflict! Lesson id1: " + l1.getId() + " Lesson id2: " + l2.getId();
                             conflicts.add(conflict);
                         }
-                        else if(l1.getStudentsGroup() == l2.getStudentsGroup()){
-                            String conflict = "Students Group conflict! Lesson id1: " + l1.getId() + "Lesson id2:" + l2.getId();
+                        if(l1.getStudentsGroup() == l2.getStudentsGroup()){
+                            String conflict = "Students Group conflict! Lesson id1: " + l1.getId() + " Lesson id2: " + l2.getId();
                             conflicts.add(conflict);
                         }
-                        else if(l1.getClassroom() == l2.getClassroom()){
-                            String conflict = "Classroom conflict! Lesson id1: " + l1.getId() + "Lesson id2:" + l2.getId();
+                        if(l1.getClassroom() == l2.getClassroom()){
+                            String conflict = "Classroom conflict! Lesson id1: " + l1.getId() + "Lesson id2: " + l2.getId();
                             conflicts.add(conflict);
                         }
                     }

@@ -10,10 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/conflicts")
 public class ConflictsFinderController {
 
     private static final Logger logger = LoggerFactory.getLogger(ConflictsFinderController.class);
@@ -24,10 +24,10 @@ public class ConflictsFinderController {
     @Autowired
     private Gson gson;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/conflicts", method = RequestMethod.GET)
     public ResponseEntity<String> ConflictsList() {
 
-        List<?> conflicts = conflictsFinderService.getAll();
+        List<String> conflicts = conflictsFinderService.getAll();
 
         if (conflicts.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
