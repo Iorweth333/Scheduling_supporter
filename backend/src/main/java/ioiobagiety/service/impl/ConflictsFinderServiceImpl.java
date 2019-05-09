@@ -1,6 +1,7 @@
 package ioiobagiety.service.impl;
 
 import ioiobagiety.model.classes.Lesson;
+import ioiobagiety.response.Conflict;
 import ioiobagiety.service.ConflictsFinderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,30 +32,30 @@ public class ConflictsFinderServiceImpl implements ConflictsFinderService {
     }
 
     @Transactional
-    public List<String> getAllConflicts(){
-        List dates = getDates();
-        List<String> conflicts = new ArrayList<String>();
-        for(Object day: dates){
-            List lessons = getSingleDayLessons((Date) day);
+    public List<Conflict> getAllConflicts(){
+        List<Date> dates = getDates();
+        List<Conflict> conflicts = new ArrayList<>();
+        for(Date day: dates){
+            List<Lesson> lessons = getSingleDayLessons(day);
             for(int i = 0; i < lessons.size(); i++){
                 for (int k = i+1; k < lessons.size(); k++) {
-                    Lesson lesson1 = (Lesson) lessons.get(i);
-                    Lesson lesson2 = (Lesson) lessons.get(k);
+                    Lesson lesson1 = lessons.get(i);
+                    Lesson lesson2 = lessons.get(k);
                     Time sqlLesson2Start = lesson2.getStartsAt();
-                    LocalTime lesson2start = LocalTime.MIDNIGHT.plus(sqlLesson2Start.getTime(), ChronoUnit.MILLIS);
+                    LocalTime lesson2Start = LocalTime.MIDNIGHT.plus(sqlLesson2Start.getTime(), ChronoUnit.MILLIS);
                     Time sqlLesson1End = lesson1.getEndsAt();
-                    LocalTime lesson1end = LocalTime.MIDNIGHT.plus(sqlLesson1End.getTime(), ChronoUnit.MILLIS);
-                    if(lesson2start.isBefore(lesson1end)) {
-                        if(lesson1.getLecturer() == lesson2.getLecturer()) {
-                            String conflict = "Lecturer conflict! Lesson id1: " + lesson1.getId() + " Lesson id2: " + lesson2.getId();
+                    LocalTime lesson1End = LocalTime.MIDNIGHT.plus(sqlLesson1End.getTime(), ChronoUnit.MILLIS);
+                    if(lesson2Start.isBefore(lesson1End)) {
+                        if(lesson1.getLecturer().equals(lesson2.getLecturer())) {
+                            Conflict conflict = new Conflict(Conflict.conflictType.LECTURER, lesson1.getId(), lesson2.getId());
                             conflicts.add(conflict);
                         }
-                        if(lesson1.getStudentsGroup() == lesson2.getStudentsGroup()){
-                            String conflict = "Students Group conflict! Lesson id1: " + lesson1.getId() + " Lesson id2: " + lesson2.getId();
+                        if(lesson1.getStudentsGroup().equals(lesson2.getStudentsGroup())) {
+                            Conflict conflict = new Conflict(Conflict.conflictType.GROUP, lesson1.getId(), lesson2.getId());
                             conflicts.add(conflict);
                         }
-                        if(lesson1.getClassroom() == lesson2.getClassroom()){
-                            String conflict = "Classroom conflict! Lesson id1: " + lesson1.getId() + "Lesson id2: " + lesson2.getId();
+                        if(lesson1.getClassroom().equals(lesson2.getClassroom())) {
+                            Conflict conflict = new Conflict(Conflict.conflictType.CLASSROOM, lesson1.getId(), lesson2.getId());
                             conflicts.add(conflict);
                         }
                     }

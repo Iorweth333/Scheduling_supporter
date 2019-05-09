@@ -1,6 +1,7 @@
 package ioiobagiety.controller;
 
 import com.google.gson.Gson;
+import ioiobagiety.response.Conflict;
 import ioiobagiety.service.ConflictsFinderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +28,7 @@ public class ConflictsFinderController {
     @RequestMapping(value = "/conflicts", method = RequestMethod.GET)
     public ResponseEntity<String> ConflictsList() {
 
-        List<String> conflicts = conflictsFinderService.getAllConflicts();
+        List<Conflict> conflicts = conflictsFinderService.getAllConflicts();
 
         if (conflicts.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

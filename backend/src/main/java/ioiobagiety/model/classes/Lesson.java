@@ -39,9 +39,11 @@ public class Lesson {
         return id;
     }
 
-    public Time getStartsAt(){ return startsAt; }
+    public Time getStartsAt() {
+        return startsAt;
+    }
 
-    public Time getEndsAt(){
+    public Time getEndsAt() {
         return endsAt;
     }
 
