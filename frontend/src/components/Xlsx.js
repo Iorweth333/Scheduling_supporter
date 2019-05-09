@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import {uploadFile2} from "../actions";
 import SchedulerCalendar from "./Upload";
 import {Field} from "redux-form";
+import Products from "./Products"
 
 
 class SheetJSApp extends Component {
@@ -44,30 +45,48 @@ class SheetJSApp extends Component {
 
 
         return (
-            <div style={{padding: "50px"}}>
-                <DragDropFile handleFile={this.handleFile}>
-                    <div className="row"><div className="col-xs-12">
-                        <DataInput handleFile={this.handleFile} />
-                    </div></div>
-                    <div className="row"><div className="col-xs-12">
-                        <button disabled={!this.state.data.length} className="btn btn-success" onClick={this.exportFile}>Export</button>
-                    </div></div>
-                    {this.props.calendar ? (
-                        <div>
-                            NAME: {this.props.calendar.fileName}
-                            <br/>
-                            URI: {this.props.calendar.fileDownloadUri}
-                            <br/>
-                            SIZE: {this.props.calendar.size}
-                            <SchedulerCalendar/>
-                        </div>
-                    ) : (
-                        <div></div>
-                    )}
-                    <div className="row"><div className="col-xs-12">
-                        <OutTable data={this.state.data} cols={this.state.cols} />
-                    </div></div>
-                </DragDropFile>
+            <div>
+                <header className="headerMain">
+                    <h2 className="logo">Scheduling Supporter</h2>
+                </header>
+                <div style={{padding: "50px"}}>
+                    <h2 className="mainText">Wprowadzenie planu zajęć</h2>
+                    <DragDropFile handleFile={this.handleFile}>
+                        <div className="row"><div className="col-xs-12">
+                            <DataInput handleFile={this.handleFile} />
+                        </div></div>
+                        <div className="row"><div className="col-xs-12">
+                            <button disabled={!this.state.data.length} className="btn btn-success" onClick={this.exportFile}>Export</button>
+                        </div></div>
+                        { (this.state.data.length) ? (
+                            <h2 className="mainText" style={{paddingTop: "3rem"}}>Plan zajęć: </h2>
+                        ) : (
+                            <div></div>
+                        )
+                        }
+                        {this.props.calendar ? (
+                            <div>
+                                NAME: {this.props.calendar.fileName}
+                                <br/>
+                                URI: {this.props.calendar.fileDownloadUri}
+                                <br/>
+                                SIZE: {this.props.calendar.size}
+                                <SchedulerCalendar/>
+                            </div>
+                        ) : (
+                            <div></div>
+                        )}
+                        { (this.state.data.length) ? (
+                            <div className="row"><div className="col-xs-12">
+                            <Products data={this.state.data} />
+                            </div></div>
+                        ) : (
+                            <div></div>
+                        )
+                        }
+                        
+                    </DragDropFile>
+                </div>
             </div>
         ); };
 };
@@ -109,23 +128,23 @@ class DataInput extends React.Component {
     ); };
 }
 
-class OutTable extends React.Component {
-    constructor(props) { super(props); };
-    render() { return (
-        <div className="table-responsive">
-            <table className="table table-striped">
-                <thead>
-                <tr>{this.props.cols.map((c) => <th key={c.key}>{c.name}</th>)}</tr>
-                </thead>
-                <tbody>
-                {this.props.data.map((r,i) => <tr key={i}>
-                    {this.props.cols.map(c => <td key={c.key}>{ r[c.key] }</td>)}
-                </tr>)}
-                </tbody>
-            </table>
-        </div>
-    ); };
-};
+// class OutTable extends React.Component {
+//     constructor(props) { super(props); };
+//     render() { return (
+//         <div className="table-responsive">
+//             <table className="table table-striped">
+//                 <thead>
+//                 <tr>{this.props.cols.map((c) => <th key={c.key}>{c.name}</th>)}</tr>
+//                 </thead>
+//                 <tbody>
+//                 {this.props.data.map((r,i) => <tr key={i}>
+//                     {this.props.cols.map(c => <td key={c.key}>{ r[c.key] }</td>)}
+//                 </tr>)}
+//                 </tbody>
+//             </table>
+//         </div>
+//     ); };
+// };
 
 const SheetJSFT = [
     "xlsx", "xlsb", "xlsm", "xls", "xml", "csv", "txt", "ods", "fods", "uos", "sylk", "dif", "dbf", "prn", "qpw", "123", "wb*", "wq*", "html", "htm"
