@@ -84,6 +84,7 @@ class SheetJSApp extends Component {
                             <div></div>
                         )
                         }
+                        {console.log(this.state.data)}
                         
                     </DragDropFile>
                 </div>

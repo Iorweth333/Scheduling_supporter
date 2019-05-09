@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 
 export default class Products extends React.Component {
 
@@ -11,6 +11,7 @@ export default class Products extends React.Component {
       var data = this.convert(this.props.data)
       this.state.products = data;
       console.log(this.state.products)
+      console.log(this.props.data)
     }
     handleUserInput(filterText) {
       this.setState({filterText: filterText});
@@ -24,16 +25,18 @@ export default class Products extends React.Component {
     convert(data) {
       var products = []
       for(var product in data){
-        products[product].id = product
-        products[product].Zjazd_nr = data[product][0]
-        products[product].Data = data[product][1]
-        products[product].Godziny = data[product][2]
-        products[product].G1_przedmiot = data[product][3]
-        products[product].G1_sala = data[product][4]
-        products[product].G1_prowadzacy = data[product][5]
-        products[product].G2_przedmiot = data[product][6]
-        products[product].G2_sala = data[product][7]
-        products[product].G2_prowadzacy = data[product][8]
+        var obj = {}
+        obj.id = product
+        obj.Zjazd_nr = data[product][0]
+        obj.Data = data[product][1]
+        obj.Godziny = data[product][2]
+        obj.G1_przedmiot = data[product][3]
+        obj.G1_sala = data[product][4]
+        obj.G1_prowadzacy = data[product][5]
+        obj.G2_przedmiot = data[product][6]
+        obj.G2_sala = data[product][7]
+        obj.G2_prowadzacy = data[product][8]
+        products.push(obj)
       }
       return products
     }
@@ -97,7 +100,7 @@ export default class Products extends React.Component {
       return (
         <div>
   
-         
+        <input type="text" placeholder="Search..." value={this.props.filterText} ref="filterTextInput" onChange={this.handleChange.bind(this)}/>
   
         </div>
   
@@ -114,9 +117,9 @@ export default class Products extends React.Component {
       var filterText = this.props.filterText;
       var id = 0;
       var product = this.props.products.map(function(product) {
-        // if (product.name.indexOf(filterText) === -1) {
-        //   return;
-        // }
+         if (product.G1_prowadzacy.indexOf(filterText) === -1 && product.G2_prowadzacy.indexOf(filterText) && product.G1_przedmiot.indexOf(filterText) && product.G2_przedmiot.indexOf(filterText)) {
+           return;
+         }
       //   if (product[3] === filterText) {
       //     return;
       //  }
@@ -168,47 +171,47 @@ export default class Products extends React.Component {
         <tr className="eachRow">
           <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
             "type": "Zjazd_nr",
-            value: this.props.product[0],
+            value: this.props.product.Zjazd_nr,
             id: this.props.product.id
           }}/>
           <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
             type: "Data",
-            value: this.props.product[1],
+            value: this.props.product.Data,
             id: this.props.product.id
           }}/>
           <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
             type: "Godziny",
-            value: this.props.product[2],
+            value: this.props.product.Godziny,
             id: this.props.product.id
           }}/>
           <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
             type: "G1_przedmiot",
-            value: this.props.product[3],
+            value: this.props.product.G1_przedmiot,
             id: this.props.product.id
           }}/>
           <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
             type: "G1_sala",
-            value: this.props.product[4],
+            value: this.props.product.G1_sala,
             id: this.props.product.id
           }}/>
           <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
             type: "G1_prowadzacy",
-            value: this.props.product[5],
+            value: this.props.product.G1_prowadzacy,
             id: this.props.product.id
           }}/>
           <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
             type: "G2_przedmiot",
-            value: this.props.product[6],
+            value: this.props.product.G2_przedmiot,
             id: this.props.product.id
           }}/>
           <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
             type: "G2_sala",
-            value: this.props.product[7],
+            value: this.props.product.G2_sala,
             id: this.props.product.id
           }}/>
           <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
             type: "G2_prowadzacy",
-            value: this.props.product[8],
+            value: this.props.product.G2_prowadzacy,
             id: this.props.product.id
           }}/>
           <td className="del-cell">
