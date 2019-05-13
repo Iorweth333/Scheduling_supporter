@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @RestController
@@ -36,23 +37,21 @@ public class EmailReminderController {
     public ResponseEntity<String> remind (@RequestParam("date") String date,
                                           @RequestParam("user") String userId,
                                           @RequestParam("lesson") String lessonId) {
-
         Lesson lesson;
         AppUser user;
         Date reminderDate;
-
+        SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         try {
-            reminderDate = gson.getAdapter(Date.class).fromJson(date);
+            reminderDate = dt.parse(date);
             user = appUserService.get(Long.parseLong(userId));
             lesson = lessonService.get(Long.parseLong(lessonId));
-        } catch (IOException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (ParseException e) {
+            return new ResponseEntity<>("Bad Date format [yyyy-MM-dd HH:mm]", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("User or Lesson not found", HttpStatus.NOT_FOUND);
         }
-
         emailReminderService.addReminder(reminderDate, user, lesson);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }
