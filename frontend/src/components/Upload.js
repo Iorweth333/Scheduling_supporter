@@ -13,6 +13,7 @@ class SheetJSApp extends Component {
         };
         this.handleFile = this.handleFile.bind(this);
         this.exportFile = this.exportFile.bind(this);
+        document.title = "Scheduling Supporter";
     };
     fillMergedCells(data){
         for (var i=2; i<data.length; i++) {

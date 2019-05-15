@@ -3,6 +3,10 @@ import logo from '../logo.svg';
 import '../App.css';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    document.title = "Scheduling Supporter"
+  }
   render() {
     return (
       <div className="App">
