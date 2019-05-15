@@ -17,17 +17,17 @@ public class BasicLessonService implements LessonService {
     private LessonRepository lessonRepository;
 
     @Transactional
-    public Lesson create(Lesson lesson) {
+    public Lesson createLesson(Lesson lesson) {
         return lessonRepository.save(lesson);
     }
 
     @Transactional
-    public Lesson get(Long id) {
+    public Lesson getLesson(Long id) {
         return lessonRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lesson not found"));
     }
 
     @Transactional
-    public List<Lesson> get(String name) {
+    public List<Lesson> getLessonsFromScheduleName(String name) {
         List<Lesson> lessons = lessonRepository.findByScheduleName(name);
         if (lessons.size() > 0) {
             return lessons;
@@ -43,6 +43,16 @@ public class BasicLessonService implements LessonService {
             return lessons;
         } else {
             throw new ResourceNotFoundException("No lessons found");
+        }
+    }
+
+    @Transactional
+    public List<Lesson> getLessonsFromGroupName(String name) throws ResourceNotFoundException {
+        List<Lesson> lessons = lessonRepository.findByScheduleName(name);
+        if (lessons.size() > 0) {
+            return lessons;
+        } else {
+            throw new ResourceNotFoundException("No lessons found for group: " + name);
         }
     }
 }
