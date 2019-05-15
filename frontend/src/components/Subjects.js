@@ -10,8 +10,6 @@ export default class Subjects extends React.Component {
       this.state.filterText = "";
       var data = this.convert(this.props.data)
       this.state.subjects = data;
-      console.log(this.state.subjects)
-      console.log(this.props.data)
     }
     handleUserInput(filterText) {
       this.setState({filterText: filterText});
@@ -20,7 +18,7 @@ export default class Subjects extends React.Component {
       var index = this.state.subjects.indexOf(subject);
       this.state.subjects.splice(index, 1);
       this.setState(this.state.subjects);
-      console.log(this.state.subjects)
+      this.props.changeParentData(this.state.subjects);
     };
     convert(data) {
       var subjects = []
@@ -57,6 +55,7 @@ export default class Subjects extends React.Component {
       }
       this.state.subjects.push(subject);
       this.setState(this.state.subjects);
+      this.props.changeParentData(this.state.subjects);
   
     }
   
@@ -78,7 +77,7 @@ export default class Subjects extends React.Component {
       return subject;
     });
       this.setState({subjects:newSubjects});
-    //  console.log(this.state.subjects);
+      this.props.changeParentData(this.state.subjects);
     };
     render() {
   
@@ -170,7 +169,7 @@ export default class Subjects extends React.Component {
       return (
         <tr className="eachRow">
           <EditableCell onSubjectTableUpdate={this.props.onSubjectTableUpdate} cellData={{
-            "type": "Zjazd_nr",
+            type: "Zjazd_nr",
             value: this.props.subject.Zjazd_nr,
             id: this.props.subject.id
           }}/>

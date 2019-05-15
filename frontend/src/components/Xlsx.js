@@ -17,6 +17,7 @@ class SheetJSApp extends Component {
         };
         this.handleFile = this.handleFile.bind(this);
         this.exportFile = this.exportFile.bind(this);
+        this.changeData = this.changeData.bind(this);
     };
     handleFile(file) {
         const reader = new FileReader();
@@ -31,6 +32,26 @@ class SheetJSApp extends Component {
         };
         if(rABS) reader.readAsBinaryString(file); else reader.readAsArrayBuffer(file);
     };
+    changeData(value) {
+        this.state.data = this.convertBack(value)
+    };
+    convertBack(value) {
+        var data = []
+        for(var v in value){
+            var row = []
+            row[0] = value[v].Zjazd_nr
+            row[1] = value[v].Data
+            row[2] = value[v].Godziny
+            row[3] = value[v].G1_przedmiot
+            row[4] = value[v].G1_sala
+            row[5] = value[v].G1_prowadzacy
+            row[6] = value[v].G2_przedmiot
+            row[7] = value[v].G2_sala
+            row[8] = value[v].G2_prowadzacy
+            data.push(row)
+        }
+        return data
+    }
     exportFile() {
         const ws = XLSX.utils.aoa_to_sheet(this.state.data);
         const wb = XLSX.utils.book_new();
@@ -78,14 +99,12 @@ class SheetJSApp extends Component {
                         )}
                         { (this.state.data.length) ? (
                             <div className="row"><div className="col-xs-12">
-                            <Subjects data={this.state.data} />
+                            <Subjects changeParentData={this.changeData} data={this.state.data}/>
                             </div></div>
                         ) : (
                             <div></div>
                         )
                         }
-                        {console.log(this.state.data)}
-                        
                     </DragDropFile>
                 </div>
             </div>
