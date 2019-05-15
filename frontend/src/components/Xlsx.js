@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import {uploadFile2} from "../actions";
 import SchedulerCalendar from "./Upload";
 import {Field} from "redux-form";
-import Products from "./Products"
+import Subjects from "./Subjects"
 
 
 class SheetJSApp extends Component {
@@ -78,7 +78,7 @@ class SheetJSApp extends Component {
                         )}
                         { (this.state.data.length) ? (
                             <div className="row"><div className="col-xs-12">
-                            <Products data={this.state.data} />
+                            <Subjects data={this.state.data} />
                             </div></div>
                         ) : (
                             <div></div>
