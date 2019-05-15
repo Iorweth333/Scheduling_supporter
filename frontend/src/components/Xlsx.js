@@ -98,7 +98,7 @@ class SheetJSApp extends Component {
                             <div></div>
                         )}
                         { (this.state.data.length) ? (
-                            <div className="row"><div className="col-xs-12">
+                            <div className="subjects row"><div className="col-xs-12">
                             <Subjects changeParentData={this.changeData} data={this.state.data}/>
                             </div></div>
                         ) : (

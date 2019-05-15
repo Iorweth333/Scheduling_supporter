@@ -38,6 +38,21 @@
         letter-spacing: 3px;
 }
 
+.subjects {
+  padding: 1rem;
+  background-color: #fafafa;
+  max-width: 100%;
+  overflow: scroll;
+}
+
+.searchBar {
+  margin-bottom: 1rem;
+}
+
+.addButton {
+  margin-bottom: 1rem;
+}
+
 .mainText {
   position: relative !important;
         float: none !important;

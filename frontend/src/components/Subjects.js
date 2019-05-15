@@ -99,7 +99,7 @@ export default class Subjects extends React.Component {
       return (
         <div>
   
-        <input type="text" placeholder="Search..." value={this.props.filterText} ref="filterTextInput" onChange={this.handleChange.bind(this)}/>
+        <input type="text"  className="searchBar" placeholder="Search..." value={this.props.filterText} ref="filterTextInput" onChange={this.handleChange.bind(this)}/>
   
         </div>
   
@@ -130,7 +130,7 @@ export default class Subjects extends React.Component {
         <div>
   
   
-        <button type="button" onClick={this.props.onRowAdd} className="btn btn-success pull-right">Add</button>
+        <button type="button" onClick={this.props.onRowAdd} className="addButton btn btn-success pull-right">Add</button>
           <table className="table table-bordered">
             <thead>
               <tr>
