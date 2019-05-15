@@ -3,6 +3,7 @@ package ioiobagiety.service.impl;
 import ioiobagiety.exception.ResourceNotFoundException;
 import ioiobagiety.model.classes.Lesson;
 import ioiobagiety.repository.LessonRepository;
+import ioiobagiety.repository.StudentsGroupRepository;
 import ioiobagiety.service.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,8 @@ public class BasicLessonService implements LessonService {
 
     @Autowired
     private LessonRepository lessonRepository;
+    @Autowired
+    private StudentsGroupRepository studentsGroupRepository;
 
     @Transactional
     public Lesson createLesson(Lesson lesson) {
@@ -48,7 +51,7 @@ public class BasicLessonService implements LessonService {
 
     @Transactional
     public List<Lesson> getLessonsFromGroupName(String name) throws ResourceNotFoundException {
-        List<Lesson> lessons = lessonRepository.findByScheduleName(name);
+        List<Lesson> lessons = lessonRepository.findByStudentsGroup(studentsGroupRepository.findByName(name));
         if (lessons.size() > 0) {
             return lessons;
         } else {
