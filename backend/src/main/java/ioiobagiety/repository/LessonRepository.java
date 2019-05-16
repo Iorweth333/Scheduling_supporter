@@ -10,13 +10,13 @@ import java.util.List;
 
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
+    List<Lesson> findByScheduleName(String name);
+
     @Query(value = "SELECT date FROM lesson GROUP BY date", nativeQuery = true)
     List<Date> getDates();
 
     @Query(value = "SELECT * FROM lesson WHERE date = :d ORDER BY starts_at", nativeQuery = true)
     List<Lesson> getSingleDayLessons(@Param("d") Date date);
-
-    List<Lesson> findByScheduleName(String name);
 
     }
 
