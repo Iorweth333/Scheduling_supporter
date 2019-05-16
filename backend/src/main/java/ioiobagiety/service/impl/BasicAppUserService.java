@@ -1,12 +1,9 @@
 package ioiobagiety.service.impl;
 
 import ioiobagiety.exception.ResourceNotFoundException;
-import ioiobagiety.model.classes.Lesson;
 import ioiobagiety.model.user.AppUser;
 import ioiobagiety.repository.AppUserRepository;
-import ioiobagiety.repository.LessonRepository;
 import ioiobagiety.service.AppUserService;
-import ioiobagiety.service.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +27,7 @@ public class BasicAppUserService implements AppUserService {
     }
 
     @Transactional
-    public List<AppUser> getAll () {
+    public List<AppUser> getAll() {
         List<AppUser> appUsers = appUserRepository.findAll();
         if (appUsers.size() > 0) {
             return appUsers;

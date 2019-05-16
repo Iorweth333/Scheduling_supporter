@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
@@ -24,7 +25,7 @@ public class BasicEmailReminderService implements EmailReminderService {
     @Autowired
     private EmailService emailService;
 
-    public void addReminder (Date date, AppUser user, Lesson lesson) {
+    public void addReminder(Date date, AppUser user, Lesson lesson) {
         logger.info("Reminder scheduled for " + date);
         new Timer().schedule(new EmailReminder(user, lesson), date);
     }
@@ -35,31 +36,59 @@ public class BasicEmailReminderService implements EmailReminderService {
         Lesson lesson;
 
         @Override
-        public void run () {
+        public void run() {
             String msg = buildText();
-            emailService.sendSimpleMessage(user.getEmail(), "Lesson Reminder", msg);
-            logger.info("Email send to " + user.getEmail());
+            try {
+                emailService.sendSimpleMessage(user.getEmail(), "Lesson Reminder", msg);
+            } catch (MessagingException e) {
+                logger.info("Email send to " + user.getEmail());
+            }
         }
 
-        private String buildText () {
+        private String buildText() {
             StringBuilder text = new StringBuilder();
-            SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
 
-            text.append("Subject: ").append(lesson.getSubject().getName())
-                .append("\nClassroom: ").append(lesson.getClassroom().getNumber())
-                .append(" ").append(lesson.getClassroom().getBuilding())
-                .append("\nDate: ").append(dt.format(lesson.getDate()))
-                .append("\nTime: ").append(lesson.getStartsAt()).append(" - ").append(lesson.getEndsAt())
-                .append("\nLecturer: ").append(lesson.getLecturer().getName())
-                .append(" ").append(lesson.getLecturer().getSurname());
+            appendSubject(text);
+            appendClassroom(text);
+            appendDate(text);
+            appendTime(text);
+            appendLecturer(text);
+
             if (user.getUserType() == UserType.lecturer) {
-                text.append("\n\nStudents: ");
-                for (AppUser student : lesson.getStudentsGroup().getStudents()) {
-                    text.append("\n").append(student.getName()).append(" ").append(student.getSurname());
-                }
+                appendStudents(text);
             }
 
             return text.toString();
+        }
+
+        private void appendStudents(StringBuilder text) {
+            text.append("\nStudents: \n");
+            for (AppUser student : lesson.getStudentsGroup().getStudents()) {
+                text.append(student.getName()).append(" ").append(student.getSurname()).append("\n");
+            }
+        }
+
+        private void appendLecturer(StringBuilder text) {
+            text.append("Lecturer: ").append(lesson.getLecturer().getName())
+                    .append(" ").append(lesson.getLecturer().getSurname()).append("\n");
+        }
+
+        private void appendTime(StringBuilder text) {
+            text.append("Time: ").append(lesson.getStartsAt()).append(" - ").append(lesson.getEndsAt()).append("\n");
+        }
+
+        private void appendDate(StringBuilder text) {
+            SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+            text.append("Date: ").append(dt.format(lesson.getDate())).append("\n");
+        }
+
+        private void appendClassroom(StringBuilder text) {
+            text.append("Classroom: ").append(lesson.getClassroom().getNumber()).append("\n");
+        }
+
+        private void appendSubject(StringBuilder text) {
+            text.append("Subject: ").append(lesson.getSubject().getName())
+                    .append(" ").append(lesson.getClassroom().getBuilding()).append("\n");
         }
 
     }

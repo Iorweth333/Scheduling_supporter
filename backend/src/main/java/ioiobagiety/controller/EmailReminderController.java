@@ -34,9 +34,9 @@ public class EmailReminderController {
     private Gson gson;
 
     @RequestMapping(value = "/remind", method = RequestMethod.POST)
-    public ResponseEntity<String> remind (@RequestParam("date") String date,
-                                          @RequestParam("user") String userId,
-                                          @RequestParam("lesson") String lessonId) {
+    public ResponseEntity<String> remind(@RequestParam("date") String date,
+                                         @RequestParam("user") String userId,
+                                         @RequestParam("lesson") String lessonId) {
         Lesson lesson;
         AppUser user;
         Date reminderDate;
