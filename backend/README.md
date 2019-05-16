@@ -32,6 +32,9 @@ While using ```uploadFile``` i ```uploadMultipleFiles``` you should add file(s) 
     "size": 123
 }
 ```
+###Conflicts endpoint
+localhost:8080/conflicts
+
 ### Test in-memory db
 H2 & Hibernate
 Auto executing ```/resources/init.sql``` to populate db
