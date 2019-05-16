@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import logo from '../logo.svg';
 import '../App.css';
-//import {redirectToUpload} from "../actions";
 
 class App extends Component {
   constructor(props) {
@@ -13,10 +11,12 @@ class App extends Component {
   }
   render() {
     return (
-        <div style={{padding: "50px"}}>
-        <div className="row"><div className="col-xs-12">
-            <button className="btn btn-success" onClick={this.redirectToUpload}>Upload Schedule</button>
-        </div></div>
+        <div className="header">
+          <div style={{padding: "50px"}}>
+          <div className="row"><div className="col-xs-12">
+              <button className="btn btn-success" onClick={this.redirectToUpload}>Upload Schedule</button>
+          </div></div>
+          </div>
         </div>
     );
   }
