@@ -46,6 +46,11 @@ Endpoints returning schedule in XLS file:
 localhost:8080/schedule/file            -- all lessons
 localhost:8080/schedule/file/{name}     -- specific schedule
 ```
+### Conflicts endpoint
+```sh
+localhost:8080/conflicts
+```
+
 ### Test in-memory db
 H2 & Hibernate
 Auto executing ```/resources/init.sql``` to populate db
