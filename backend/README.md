@@ -18,11 +18,12 @@ gradle run
 ```
 ### Import endpoints
 ```sh
-localhost:8080/files
-localhost:8080/filse/multiple
-localhost:8080/files/{filename}
+localhost:8080/schedule/file
+localhost:8080/schedule/files
 ```
-While using ```uploadFile``` i ```uploadMultipleFiles``` you should add file(s) in body.
+Required keys for:  
+ ```file``` -> ```file```  
+ ```files``` -> ```files```
 #####Response message
 ```json
 {
@@ -32,9 +33,19 @@ While using ```uploadFile``` i ```uploadMultipleFiles``` you should add file(s) 
     "size": 123
 }
 ```
-###Conflicts endpoint
-localhost:8080/conflicts
+### Export endpoints
+Endpoints returning schedule in JSON:
+```sh
+localhost:8080/schedule                 -- all lessons
+localhost:8080/schedule/{id}            -- specific lesson
+localhost:8080/schedule/name/{name}     -- specific schedule
+```
 
+Endpoints returning schedule in XLS file:
+```sh
+localhost:8080/schedule/file            -- all lessons
+localhost:8080/schedule/file/{name}     -- specific schedule
+```
 ### Test in-memory db
 H2 & Hibernate
 Auto executing ```/resources/init.sql``` to populate db

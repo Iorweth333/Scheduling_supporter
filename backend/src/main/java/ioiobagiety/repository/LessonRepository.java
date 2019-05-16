@@ -15,5 +15,8 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
     @Query(value = "SELECT * FROM lesson WHERE date = :d ORDER BY starts_at", nativeQuery = true)
     List<Lesson> getSingleDayLessons(@Param("d") Date date);
-}
+
+    List<Lesson> findByScheduleName(String name);
+
+    }
 
