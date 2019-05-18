@@ -27,13 +27,18 @@ public class BasicLessonService implements LessonService {
     }
 
     @Transactional
-    public List<Lesson> get(String name) {
+    public List<Lesson> getByScheduleName(String name) {
         List<Lesson> lessons = lessonRepository.findByScheduleName(name);
         if (lessons.size() > 0) {
             return lessons;
         } else {
             throw new ResourceNotFoundException("No lessons found");
         }
+    }
+
+    @Transactional
+    public List<Lesson> getByClassroomId(Long id) {
+        return lessonRepository.findByClassroomId(id);
     }
 
     @Transactional

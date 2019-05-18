@@ -10,7 +10,9 @@ public interface LessonService {
 
     Lesson get(Long id) throws ResourceNotFoundException;
 
-    List<Lesson> get(String name) throws ResourceNotFoundException;
+    List<Lesson> getByScheduleName(String name) throws ResourceNotFoundException;
+
+    List<Lesson> getByClassroomId(Long id);
 
     List<Lesson> getAll() throws ResourceNotFoundException;
 }

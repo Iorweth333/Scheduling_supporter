@@ -31,7 +31,7 @@ public class XLSFileExportController {
 
     @RequestMapping(value = "/{name}", method = RequestMethod.GET)
     public ResponseEntity<Resource> downloadFile(@PathVariable String name, HttpServletRequest request) throws IOException {
-        XLSFileExportProvider.provideFile(lessonService.get(name));
+        XLSFileExportProvider.provideFile(lessonService.getByScheduleName(name));
         return getResourceResponseEntity(request);
     }
 

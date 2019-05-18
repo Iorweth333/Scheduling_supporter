@@ -39,7 +39,7 @@ public class ScheduleExportController {
 
     @RequestMapping(value = "/name/{name}", method = RequestMethod.GET)
     public ResponseEntity<String> getFromName(@PathVariable("name") String name) {
-        List<Lesson> lessons = lessonService.get(name);
+        List<Lesson> lessons = lessonService.getByScheduleName(name);
         if (lessons.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
