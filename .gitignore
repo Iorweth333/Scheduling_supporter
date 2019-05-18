@@ -1,3 +1,5 @@
+.idea/
+
 ### backend ### 
 /backend/.idea/
 /backend/build/
@@ -45,3 +47,4 @@
 ### ------- ###
 
 
+.idea/

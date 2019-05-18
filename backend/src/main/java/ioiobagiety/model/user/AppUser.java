@@ -24,4 +24,22 @@ public class AppUser {
     private String email;
     private UserType userType;
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof AppUser))
+            return false;
+
+        AppUser user = (AppUser) o;
+
+        return user.id.equals(id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * id.hashCode();
+    }
+
 }

@@ -25,4 +25,20 @@ public class StudentsGroup {
     @OneToMany
     private List<AppUser> students;
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof StudentsGroup))
+            return false;
+
+        StudentsGroup group = (StudentsGroup) o;
+
+        return group.id.equals(id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * id.hashCode();
+    }
 }
