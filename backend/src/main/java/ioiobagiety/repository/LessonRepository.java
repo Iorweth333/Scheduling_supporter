@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
     List<Lesson> findByScheduleName(String name);
+
+    List<Lesson> findByClassroomId(Long id);
 }
