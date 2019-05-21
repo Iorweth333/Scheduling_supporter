@@ -10,12 +10,7 @@ gradle run
 ```
 
 ### REST
-### Test endpoints
-```sh
-127.0.0.1:8080 
-127.0.0.1:8080/bagieta
-127.0.0.1:8080/bagieta/{id}
-```
+
 ### Import endpoints
 ```sh
 localhost:8080/schedule/file
@@ -43,8 +38,9 @@ localhost:8080/schedule/name/{name}     -- specific schedule
 
 Endpoints returning schedule in XLS file:
 ```sh
-localhost:8080/schedule/file            -- all lessons
-localhost:8080/schedule/file/{name}     -- specific schedule
+localhost:8080/schedule/xls                 -- all lessons
+localhost:8080/schedule/xls/{name}          -- schedule for given schedule name
+localhost:8080/schedule/xls/group/{name}    -- schedule for given group name
 ```
 ### Test in-memory db
 H2 & Hibernate

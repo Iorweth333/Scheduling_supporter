@@ -1,6 +1,7 @@
 package ioiobagiety.repository;
 
 import ioiobagiety.model.classes.Lesson;
+import ioiobagiety.model.group.StudentsGroup;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,6 +13,8 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
     List<Lesson> findByScheduleName(String name);
 
+    List<Lesson> findByStudentsGroup(StudentsGroup studentsGroup);
+  
     @Query(value = "SELECT date FROM lesson GROUP BY date", nativeQuery = true)
     List<Date> getDates();
 
