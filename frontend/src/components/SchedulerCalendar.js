@@ -92,6 +92,8 @@ class SchedulerCalendar extends Component {
     constructor(props) {
         super(props);
 
+        document.title = "Scheduling Supporter";
+
         this.state = {
             groups: null,
             items: null,
