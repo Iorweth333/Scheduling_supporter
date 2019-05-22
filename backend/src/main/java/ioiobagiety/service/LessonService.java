@@ -6,11 +6,14 @@ import ioiobagiety.model.classes.Lesson;
 import java.util.List;
 
 public interface LessonService {
-    Lesson create(Lesson lesson);
 
-    Lesson get(Long id) throws ResourceNotFoundException;
+    Lesson createLesson(Lesson lesson) throws BadRequestException;
 
-    List<Lesson> get(String name) throws ResourceNotFoundException;
+    Lesson getLesson(Long id) throws ResourceNotFoundException;
+
+    List<Lesson> getLessonsFromScheduleName(String name) throws ResourceNotFoundException;
 
     List<Lesson> getAll() throws ResourceNotFoundException;
+
+    List<Lesson> getLessonsFromGroupName(String name) throws ResourceNotFoundException;
 }

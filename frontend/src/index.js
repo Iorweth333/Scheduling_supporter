@@ -5,12 +5,13 @@ import {Provider} from 'react-redux';
 import {applyMiddleware, createStore} from 'redux';
 import reducers from './reducers';
 import thunk from 'redux-thunk';
+import ReduxPromise from "redux-promise";
 import Routes from "./routes";
 //import * as serviceWorker from './serviceWorker';
 
 
 
-const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
+const createStoreWithMiddleware = applyMiddleware(ReduxPromise, thunk)(createStore);
 
 
 ReactDOM.render(
