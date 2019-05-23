@@ -16,7 +16,7 @@ import java.util.List;
 import java.sql.Time;
 
 @Service
-public class ConflictsFinderServiceImpl implements ConflictsFinderService {
+public class BasicConflictsFinderService implements ConflictsFinderService {
 
     @Autowired
     private LessonRepository repository;

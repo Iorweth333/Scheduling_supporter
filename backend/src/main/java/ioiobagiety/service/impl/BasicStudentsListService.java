@@ -11,12 +11,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class StudentsListServiceImpl {
+public class BasicStudentsListService {
 
-    String getStudentsList(Lesson lesson) {
+    void getStudentsList(Lesson lesson, String fileName) {
 
         try {
-            String fpath = "/temp/sample.pdf";
+            String fpath = fileName + ".pdf";
 
             File file = new File(fpath);
             if (!file.exists()) {
@@ -28,8 +28,8 @@ public class StudentsListServiceImpl {
                     new FileOutputStream(file.getAbsoluteFile()));
 
             document.open();
-            document.add(new Paragraph(lesson.getSubject().getName() + " Grupa: " + lesson.getStudentsGroup().getName()))
-            document.add(new Paragraph(lesson.getDate + " " + lesson.getStartsAt() + " " + lesson.getEndsAt()));
+            document.add(new Paragraph(lesson.getSubject().getName() + " Grupa: " + lesson.getStudentsGroup().getName()));
+            document.add(new Paragraph(lesson.getDate() + " " + lesson.getStartsAt() + " " + lesson.getEndsAt()));
             document.add(new Paragraph(" "));
 
             int num = 1;
@@ -37,15 +37,11 @@ public class StudentsListServiceImpl {
                 document.add(new Paragraph(num + ". " + student.getName() + " " + student.getSurname()));
                 num++;
             }
-
             document.close();
-            return "";
         } catch (IOException e) {
             e.printStackTrace();
-            return "";
         } catch (DocumentException e) {
             e.printStackTrace();
-            return "";
         }
     }
 }
