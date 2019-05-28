@@ -38,7 +38,7 @@ public class ScheduleExportController {
     @CrossOrigin(maxAge = 3600)
     @RequestMapping(value = "/name/{name}", method = RequestMethod.GET)
     public ResponseEntity<String> getFromName(@PathVariable("name") String name) {
-        List<Lesson> lessons = lessonService.getByScheduleName(name);
+        List<Lesson> lessons = lessonService.getLessonsFromScheduleName(name);
         if (lessons.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {

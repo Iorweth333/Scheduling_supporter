@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @RestController
-@RequestMapping(value = "/schedule/file")
+@RequestMapping(value = "/schedule/xls")
 public class XLSFileExportController {
     @Autowired
     private LessonService lessonService;
@@ -31,7 +31,7 @@ public class XLSFileExportController {
 
     @RequestMapping(value = "/{name}", method = RequestMethod.GET)
     public ResponseEntity<Resource> downloadFile(@PathVariable String name, HttpServletRequest request) throws IOException {
-        XLSFileExportProvider.provideFile(lessonService.getByScheduleName(name));
+        XLSFileExportProvider.provideFile(lessonService.getLessonsFromScheduleName(name));
         return getResourceResponseEntity(request);
     }
 
@@ -51,6 +51,12 @@ public class XLSFileExportController {
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
+    }
+
+    @RequestMapping(value = "/group/{name}", method = RequestMethod.GET)
+    public ResponseEntity<Resource> downloadScheduleForGroup(@PathVariable String name, HttpServletRequest request) throws IOException {
+        XLSFileExportProvider.provideFile(lessonService.getLessonsFromGroupName(name));
+        return getResourceResponseEntity(request);
     }
 }
 

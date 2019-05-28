@@ -56,7 +56,7 @@ public class ClassroomController {
     public ResponseEntity<String> getLessons(@PathVariable("classroomId") long classroomId) {
         List<Lesson> lessons;
         try {
-            lessons = lessonService.getByClassroomId(classroomId);
+            lessons = lessonService.getLessonsFromClassroomId(classroomId);
         } catch (ResourceNotFoundException ex) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

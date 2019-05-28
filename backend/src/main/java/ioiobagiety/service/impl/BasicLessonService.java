@@ -3,6 +3,7 @@ package ioiobagiety.service.impl;
 import ioiobagiety.exception.ResourceNotFoundException;
 import ioiobagiety.model.classes.Lesson;
 import ioiobagiety.repository.LessonRepository;
+import ioiobagiety.repository.StudentsGroupRepository;
 import ioiobagiety.service.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,19 +16,21 @@ public class BasicLessonService implements LessonService {
 
     @Autowired
     private LessonRepository lessonRepository;
+    @Autowired
+    private StudentsGroupRepository studentsGroupRepository;
 
     @Transactional
-    public Lesson create(Lesson lesson) {
+    public Lesson createLesson(Lesson lesson) {
         return lessonRepository.save(lesson);
     }
 
     @Transactional
-    public Lesson get(Long id) {
+    public Lesson getLesson(Long id) {
         return lessonRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lesson not found"));
     }
 
     @Transactional
-    public List<Lesson> getByScheduleName(String name) {
+    public List<Lesson> getLessonsFromScheduleName(String name) {
         List<Lesson> lessons = lessonRepository.findByScheduleName(name);
         if (lessons.size() > 0) {
             return lessons;
@@ -37,7 +40,7 @@ public class BasicLessonService implements LessonService {
     }
 
     @Transactional
-    public List<Lesson> getByClassroomId(Long id) {
+    public List<Lesson> getLessonsFromClassroomId(Long id) {
         return lessonRepository.findByClassroomId(id);
     }
 
@@ -48,6 +51,16 @@ public class BasicLessonService implements LessonService {
             return lessons;
         } else {
             throw new ResourceNotFoundException("No lessons found");
+        }
+    }
+
+    @Transactional
+    public List<Lesson> getLessonsFromGroupName(String name) throws ResourceNotFoundException {
+        List<Lesson> lessons = lessonRepository.findByStudentsGroup(studentsGroupRepository.findByName(name));
+        if (lessons.size() > 0) {
+            return lessons;
+        } else {
+            throw new ResourceNotFoundException("No lessons found for group: " + name);
         }
     }
 }

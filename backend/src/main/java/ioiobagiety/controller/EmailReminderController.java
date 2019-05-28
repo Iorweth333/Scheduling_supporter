@@ -44,7 +44,7 @@ public class EmailReminderController {
         try {
             reminderDate = dt.parse(date);
             user = appUserService.get(Long.parseLong(userId));
-            lesson = lessonService.get(Long.parseLong(lessonId));
+            lesson = lessonService.getLesson(Long.parseLong(lessonId));
         } catch (ParseException e) {
             return new ResponseEntity<>("Bad Date format [yyyy-MM-dd HH:mm]", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
