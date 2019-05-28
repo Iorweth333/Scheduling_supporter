@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.List;
 
 @RestController
@@ -20,6 +21,7 @@ public class ConflictsFinderController {
     @Autowired
     private Gson gson;
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/conflicts", method = RequestMethod.GET)
     public ResponseEntity<String> ConflictsList() {
 

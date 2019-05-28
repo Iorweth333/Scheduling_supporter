@@ -72,20 +72,20 @@ class SchedulerCalendar extends Component {
 
 
     componentDidMount() {
-        if(this.props.loading){
+        if (this.props.loading) {
             this.props.fetchLessons();
         }
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
-        let groups = this.parseLecturers(nextProps.lessons.map(({ lecturer }) => lecturer))
+        let groups = this.parseLecturers(nextProps.lessons.map(({ lecturer }) => lecturer));
             groups.push({ id: 0, title: 'CS', root: true });
 
         this.setState({
             lessons: nextProps.lessons,
             groups: groups,
             items: this.parseLessons(nextProps.lessons),
-            currentlesson: nextProps.lessons[0]
+            currentlesson: nextProps.lessons[0],
         })
     }
 
@@ -204,6 +204,9 @@ class SchedulerCalendar extends Component {
         this.setState({modalShow: true, currentlesson: lesson});
     }
 
+    handleConflictsClick = () => {
+        this.props.history.push(`/conflicts`)
+    }
 
 
     itemRenderer({item,itemContext,getItemProps,getResizeProps}){
@@ -256,6 +259,7 @@ class SchedulerCalendar extends Component {
                 <button onClick={this.handleNextMonth}>nextMonth</button>
                 <button onClick={this.handlePrevYear}>prevYear</button>
                 <button onClick={this.handleNextYear}>nextYear</button>
+                <button onClick={this.handleConflictsClick}>conflicts</button>
                 <Timeline
                     groups={this.newGroups(groups, openGroups)}
                     items={items}

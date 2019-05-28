@@ -34,12 +34,3 @@ export function fetchLessons(){
     };
 }
 
-export function redirectToUpload() {
-
-    const request = axios.get(`${ROOT_URL}/upload`);
-
-    /*return(dispatch) => {
-        request.then();
-    }*/
-}
-
