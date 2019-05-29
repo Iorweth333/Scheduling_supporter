@@ -1,0 +1,2 @@
+backend=https://github.com/heroku/heroku-buildpack-gradle.git
+frontend=https://github.com/heroku/heroku-buildpack-nodejs.git

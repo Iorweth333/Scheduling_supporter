@@ -1,12 +1,17 @@
-import {FETCH_LESSONS, UPLOAD_FILE} from "../actions";
+import {FETCH_LESSONS} from "../actions";
 
-export default function(state = null, action){
+const initialState = {
+    lessons: [],
+    loading: true,
+    error: null
+};
+
+
+export default function(state = initialState, action){
     switch(action.type){
         case FETCH_LESSONS:
-            console.log(action);
-            return action.payload;
-        case UPLOAD_FILE:
-            console.log(action);
+            return { ...state, lessons: action.payload, loading: false, error: null };
+        default:
+            return state;
     }
-    return state;
 }

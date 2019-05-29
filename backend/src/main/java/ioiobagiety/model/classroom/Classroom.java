@@ -20,4 +20,20 @@ public class Classroom {
     private String building;
     private ClassroomType classroomType;
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof Classroom))
+            return false;
+
+        Classroom cr = (Classroom) o;
+
+        return cr.id.equals(id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * id.hashCode();
+    }
 }
