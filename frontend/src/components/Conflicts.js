@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {fetchConflicts} from "../actions";
 import {Spinner} from "react-bootstrap";
+import '../App.css';
+import Jumbotron from 'react-bootstrap/Jumbotron'
+import TabContainer from "react-bootstrap/es/TabContainer";
 
 class Conflicts extends Component {
     constructor(props) {
@@ -14,16 +17,33 @@ class Conflicts extends Component {
         };
     }
 
+    redirectToUpload = () => {
+        this.props.history.push(`/upload`);
+    };
+
+    redirectToLessons = () => {
+        this.props.history.push(`/lessons`);
+    };
+
+
     parseConflicts(conflicts) {
         return conflicts.map( conflict => {
             return (
-                <div className="conflict">
-                    <p>{ conflict.typeOfConflict }</p>
-                    <p>{ conflict.lessonId1 }</p>
-                    <p>{ conflict.lessonId2 }</p>
-                </div>
-        )
+                <Jumbotron fluid style={{padding: "20px"}}>
+                    <TabContainer>
+                        <h1>{ conflict.typeOfConflict }</h1>
+                        <p>{ conflict.lessonId1 }</p>
+                        <p>{ conflict.lessonId2 }</p>
+                    </TabContainer>
+                </Jumbotron>
+        );
         });
+    }
+
+    noConflicts() {
+        return (
+            <p>There are no conflicts</p>
+        );
     }
 
     componentDidMount() {
@@ -33,7 +53,11 @@ class Conflicts extends Component {
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
-        this.setState({conflicts: this.parseConflicts(nextProps.conflicts)});
+        if (nextProps.conflicts && nextProps.conflicts.length) {
+            this.setState({conflicts: this.parseConflicts(nextProps.conflicts)});
+            return;
+        }
+        this.setState({conflicts: this.noConflicts()})
     }
 
     render() {
@@ -48,8 +72,24 @@ class Conflicts extends Component {
         }
 
         return (
-            <div className="Conflicts">
-                {this.state.conflicts}
+            <div>
+                <div className="header">
+                    <div style={{padding: "50px"}}>
+                        <div className="row"><div className="col-xs-12">
+                            <div className="buttons_line">
+                            <div className="divider">
+                                <button className="btn btn-success" onClick={this.redirectToUpload}>Upload Schedule</button>
+                            </div>
+                            <div className="divider">
+                                <button className="btn btn-success" onClick={this.redirectToLessons}>Lessons</button>
+                            </div>
+                            </div>
+                        </div></div>
+                    </div>
+                </div>
+                <div className="Conflicts">
+                    {this.state.conflicts}
+                </div>
             </div>
         )
     }
