@@ -1,4 +1,7 @@
 import React, {Component} from 'react';
+import {connect} from "react-redux";
+import {fetchConflicts} from "../actions";
+import {Spinner} from "react-bootstrap";
 
 class Conflicts extends Component {
     constructor(props) {
@@ -24,14 +27,26 @@ class Conflicts extends Component {
     }
 
     componentDidMount() {
-        fetch("http://localhost:8080/conflicts")
-            .then(response => response.json())
-            .then(conflicts => {
-                this.setState({conflicts: this.parseConflicts(conflicts)});
-            });
+        if (this.props.loading) {
+            this.props.fetchConflicts();
+        }
+    }
+
+    componentWillReceiveProps(nextProps, nextContext) {
+        this.setState({conflicts: this.parseConflicts(nextProps.conflicts)});
     }
 
     render() {
+        const { error, loading, conflicts } = this.props;
+
+        if (error) {
+            return <div>Error! {error.message}</div>;
+        }
+
+        if (loading) {
+            return <div><Spinner animation="grow" /></div>;
+        }
+
         return (
             <div className="Conflicts">
                 {this.state.conflicts}
@@ -40,4 +55,12 @@ class Conflicts extends Component {
     }
 }
 
-export default Conflicts;
+function mapStateToProps(state){
+    return{
+        loading: state.conflicts.loading,
+        error: state.conflicts.error,
+        conflicts: state.conflicts.conflicts,
+    };
+}
+
+export default connect(mapStateToProps, {fetchConflicts})(Conflicts);

@@ -4,6 +4,7 @@ const ROOT_URL = 'http://localhost:8080';
 
 export const UPLOAD_FILE = 'UPLOAD_FILE';
 export const FETCH_LESSONS = 'FETCH_LESSONS';
+export const FETCH_CONFLICTS = 'FETCH_CONFLICTS';
 
 
 export function uploadFile(props, history){
@@ -34,3 +35,13 @@ export function fetchLessons(){
     };
 }
 
+export function fetchConflicts() {
+
+    const request = axios.get(`${ROOT_URL}/conflicts`);
+
+    return(dispatch) => {
+        request.then(({data}) => {
+            dispatch({type: FETCH_CONFLICTS, payload: data});
+        });
+    };
+}
