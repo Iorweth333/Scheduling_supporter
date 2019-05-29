@@ -253,46 +253,66 @@ class SchedulerCalendar extends Component {
 
         return (
             <div>
-                <button onClick={this.handlePrevDay}>prevDay</button>
-                <button onClick={this.handleNextDay}>nextDay</button>
-                <button onClick={this.handlePrevMonth}>prevMonth</button>
-                <button onClick={this.handleNextMonth}>nextMonth</button>
-                <button onClick={this.handlePrevYear}>prevYear</button>
-                <button onClick={this.handleNextYear}>nextYear</button>
-                <button onClick={this.handleConflictsClick}>conflicts</button>
-                <Timeline
-                    groups={this.newGroups(groups, openGroups)}
-                    items={items}
-                    keys={keys}
-                    fixedHeader="fixed"
-                    sidebarWidth={250}
-                    lineHeight={60}
-                    sidebarContent={<div></div>}
-                    canMove
-                    canResize="right"
-                    canSelect
-                    itemsSorted
-                    itemRenderer={this.itemRenderer}
-                    itemTouchSendsClick={false}
-                    stackItems
-                    itemHeightRatio={0.85}
-                    showCursorLine
-                    defaultTimeStart={defaultTimeStart}
-                    defaultTimeEnd={defaultTimeEnd}
-                    visibleTimeStart={visibleTimeStart}
-                    visibleTimeEnd={visibleTimeEnd}
-                    onItemDoubleClick={this.handleLessonClick}
-                    onItemMove={this.handleItemMove}
-                    onItemResize={this.handleItemResize}
-                    onTimeChange={this.handleTimeChange}
-                />
+                <div className="header">
+                    <div style={{padding: "50px"}}>
+                        <div className="row"><div className="col-xs-12">
+                            <div className="buttons_line">
+                                <div className="divider">
+                                    <button className="btn btn-success" onClick={this.handlePrevDay}>prevDay</button>
+                                </div>
+                                <div className="divider">
+                                    <button className="btn btn-success" onClick={this.handleNextDay}>nextDay</button>
+                                </div>
+                                <div className="divider">
+                                    <button className="btn btn-success" onClick={this.handlePrevMonth}>prevMonth</button>
+                                </div>
+                                <div className="divider">
+                                    <button className="btn btn-success" onClick={this.handleNextMonth}>nextMonth</button>
+                                </div>
+                                <div className="divider">
+                                    <button className="btn btn-success" onClick={this.handlePrevYear}>prevYear</button>
+                                </div>
+                                <div className="divider">
+                                    <button className="btn btn-success" onClick={this.handleNextYear}>nextYear</button>
+                                </div>
+                                <div className="divider">
+                                    <button className="btn btn-success" onClick={this.handleConflictsClick}>conflicts</button>
+                                </div>
+                            </div></div></div>
+                    </div>
+                </div>
+                    <Timeline
+                        groups={this.newGroups(groups, openGroups)}
+                        items={items}
+                        keys={keys}
+                        fixedHeader="fixed"
+                        sidebarWidth={250}
+                        lineHeight={60}
+                        sidebarContent={<div></div>}
+                        canMove
+                        canResize="right"
+                        canSelect
+                        itemsSorted
+                        itemRenderer={this.itemRenderer}
+                        itemTouchSendsClick={false}
+                        stackItems
+                        itemHeightRatio={0.85}
+                        showCursorLine
+                        defaultTimeStart={defaultTimeStart}
+                        defaultTimeEnd={defaultTimeEnd}
+                        visibleTimeStart={visibleTimeStart}
+                        visibleTimeEnd={visibleTimeEnd}
+                        onItemDoubleClick={this.handleLessonClick}
+                        onItemMove={this.handleItemMove}
+                        onItemResize={this.handleItemResize}
+                        onTimeChange={this.handleTimeChange}
+                    />
 
-                <Lesson
-                    show={this.state.modalShow}
-                    onHide={modalClose}
-                    currentlesson={this.state.currentlesson}
-                />
-
+                    <Lesson
+                        show={this.state.modalShow}
+                        onHide={modalClose}
+                        currentlesson={this.state.currentlesson}
+                    />
             </div>
         );
     }

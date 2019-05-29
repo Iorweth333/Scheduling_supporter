@@ -9,6 +9,7 @@ const rootReducer = combineReducers({
     calendar: calendarReducer,
     lessons: lessonReducer,
     conflicts: conflictsReducer,
+    lesson: lessonReducer,
 });
 
 export default rootReducer;

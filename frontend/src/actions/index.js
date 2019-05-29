@@ -53,6 +53,7 @@ export function fetchLesson(lessonId) {
 
     return(dispatch) => {
         request.then(({data}) => {
+            console.log(data);
             dispatch({type: FETCH_LESSON, payload: data});
         });
     };
