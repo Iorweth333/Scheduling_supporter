@@ -3,6 +3,7 @@ import XLSX from 'xlsx';
 import 'bootstrap/dist/css/bootstrap.css';
 import {connect} from 'react-redux';
 import {uploadFile} from "../actions";
+import Subjects from "./Subjects"
 
 class SheetJSApp extends Component {
     constructor(props) {
@@ -13,6 +14,7 @@ class SheetJSApp extends Component {
         };
         this.handleFile = this.handleFile.bind(this);
         this.exportFile = this.exportFile.bind(this);
+        this.changeData = this.changeData.bind(this);
         document.title = "Scheduling Supporter";
     };
     fillMergedCells(data){
@@ -36,6 +38,26 @@ class SheetJSApp extends Component {
         };
         if(rABS) reader.readAsBinaryString(file); else reader.readAsArrayBuffer(file);
     };
+    changeData(value) {
+        this.state.data = this.convertBack(value)
+    };
+    convertBack(value) {
+        var data = []
+        for(var v in value){
+            var row = []
+            row[0] = value[v].Zjazd_nr
+            row[1] = value[v].Data
+            row[2] = value[v].Godziny
+            row[3] = value[v].G1_przedmiot
+            row[4] = value[v].G1_sala
+            row[5] = value[v].G1_prowadzacy
+            row[6] = value[v].G2_przedmiot
+            row[7] = value[v].G2_sala
+            row[8] = value[v].G2_prowadzacy
+            data.push(row)
+        }
+        return data
+    }
     exportFile() {
         const ws = XLSX.utils.aoa_to_sheet(this.state.data);
         const wb = XLSX.utils.book_new();
@@ -45,18 +67,29 @@ class SheetJSApp extends Component {
     };
     render() {
         return (
-            <div style={{padding: "50px"}}>
-                <DragDropFile handleFile={this.handleFile}>
-                    <div className="row"><div className="col-xs-12">
-                        <DataInput handleFile={this.handleFile} />
-                    </div></div>
-                    <div className="row"><div className="col-xs-12">
-                        <button disabled={!this.state.data.length} className="btn btn-success" onClick={this.exportFile}>Upload</button>
-                    </div></div>
-                    <div className="row"><div className="col-xs-12">
-                        <OutTable data={this.state.data} cols={this.state.cols} />
-                    </div></div>
-                </DragDropFile>
+            <div>
+                <header className="headerMain">
+                    <h2 className="logo">Scheduling Supporter</h2>
+                </header>
+                <div style={{padding: "50px"}}>
+                    <h2 className="mainText">Wprowadzenie planu zajęć</h2>
+                    <DragDropFile handleFile={this.handleFile}>
+                        <div className="row"><div className="col-xs-12">
+                            <DataInput handleFile={this.handleFile} />
+                        </div></div>
+                        <div className="row"><div className="col-xs-12">
+                            <button disabled={!this.state.data.length} className="btn btn-success" onClick={this.exportFile}>Export</button>
+                        </div></div>
+                        { (this.state.data.length) ? (
+                            <div className="subjects row"><div className="col-xs-12">
+                                <Subjects changeParentData={this.changeData} data={this.state.data}/>
+                            </div></div>
+                        ) : (
+                            <div></div>
+                        )
+                        }
+                    </DragDropFile>
+                </div>
             </div>
         ); };
 };
@@ -98,23 +131,23 @@ class DataInput extends React.Component {
     ); };
 }
 
-class OutTable extends React.Component {
-    constructor(props) { super(props); };
-    render() { return (
-        <div className="table-responsive">
-            <table className="table table-striped">
-                <thead>
-                <tr>{this.props.cols.map((c) => <th key={c.key}>{c.name}</th>)}</tr>
-                </thead>
-                <tbody>
-                {this.props.data.map((r,i) => <tr key={i}>
-                    {this.props.cols.map(c => <td key={c.key}>{ r[c.key] }</td>)}
-                </tr>)}
-                </tbody>
-            </table>
-        </div>
-    ); };
-};
+// class OutTable extends React.Component {
+//     constructor(props) { super(props); };
+//     render() { return (
+//         <div className="table-responsive">
+//             <table className="table table-striped">
+//                 <thead>
+//                 <tr>{this.props.cols.map((c) => <th key={c.key}>{c.name}</th>)}</tr>
+//                 </thead>
+//                 <tbody>
+//                 {this.props.data.map((r,i) => <tr key={i}>
+//                     {this.props.cols.map(c => <td key={c.key}>{ r[c.key] }</td>)}
+//                 </tr>)}
+//                 </tbody>
+//             </table>
+//         </div>
+//     ); };
+// };
 
 const SheetJSFT = [
     "xlsx", "xlsb", "xlsm", "xls", "xml", "csv", "txt", "ods", "fods", "uos", "sylk", "dif", "dbf", "prn", "qpw", "123", "wb*", "wq*", "html", "htm"
@@ -127,3 +160,10 @@ const make_cols = refstr => {
 };
 
 export default connect(null, {uploadFile})(SheetJSApp);
+
+
+
+
+
+
+
