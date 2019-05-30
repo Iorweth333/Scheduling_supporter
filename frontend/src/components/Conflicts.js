@@ -7,7 +7,7 @@ import Jumbotron from 'react-bootstrap/Jumbotron'
 import TabContainer from "react-bootstrap/es/TabContainer";
 
 
-class Conflicts extends Component {
+export class Conflicts extends Component {
 
     constructor(props) {
         super(props);

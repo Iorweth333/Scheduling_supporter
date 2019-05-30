@@ -8,6 +8,7 @@ import {connect} from "react-redux";
 import {Button, Spinner} from "react-bootstrap";
 import { MdModeEdit } from "react-icons/md";
 import Lesson from "./Lesson";
+import Conflicts from "./Conflicts";
 
 var keys = {
     groupIdKey: "id",
@@ -206,7 +207,7 @@ class SchedulerCalendar extends Component {
 
     handleConflictsClick = () => {
         this.props.history.push(`/conflicts`)
-    }
+    };
 
 
     itemRenderer({item,itemContext,getItemProps,getResizeProps}){

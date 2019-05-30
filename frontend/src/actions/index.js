@@ -5,7 +5,6 @@ const ROOT_URL = 'http://localhost:8080';
 export const UPLOAD_FILE = 'UPLOAD_FILE';
 export const FETCH_LESSONS = 'FETCH_LESSONS';
 export const FETCH_CONFLICTS = 'FETCH_CONFLICTS';
-export const FETCH_LESSON = 'FETCH_LESSON';
 
 
 export function uploadFile(props, history){
@@ -43,30 +42,6 @@ export function fetchConflicts() {
     return(dispatch) => {
         request.then(({data}) => {
             dispatch({type: FETCH_CONFLICTS, payload: data});
-        });
-    };
-}
-
-/*export function fetchLesson(lessonId) {
-
-    const request = axios.get(`${ROOT_URL}/lessons/${lessonId}`);
-
-    return(dispatch) => {
-        request.then(({data}) => {
-            console.log(data);
-            dispatch({type: FETCH_LESSON, payload: data});
-        });
-    };
-}*/
-
-export function fetchLesson() {
-
-    const request = axios.get(`${ROOT_URL}/schedule`);
-
-    return(dispatch) => {
-        request.then(({data}) => {
-            console.log(data);
-            dispatch({type: FETCH_LESSON, payload: data});
         });
     };
 }
