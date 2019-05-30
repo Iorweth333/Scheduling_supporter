@@ -11,6 +11,6 @@ export default function(state = initialState, action){
         case FETCH_CONFLICTS:
             return { ...state, conflicts: action.payload, loading: false, error: null };
         default:
-            return state;
+            return { ...state, conflicts: action.payload, loading: true, error: null };
     }
 }

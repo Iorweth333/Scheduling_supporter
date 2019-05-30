@@ -15,6 +15,6 @@ export default function(state = initialState, action){
         case FETCH_LESSON:
             return {lesson: action.payload};
         default:
-            return state;
+            return { ...state, lessons: action.payload, loading: true, error: null };
     }
 }

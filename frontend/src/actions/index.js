@@ -47,9 +47,21 @@ export function fetchConflicts() {
     };
 }
 
-export function fetchLesson(lessonId) {
+/*export function fetchLesson(lessonId) {
 
     const request = axios.get(`${ROOT_URL}/lessons/${lessonId}`);
+
+    return(dispatch) => {
+        request.then(({data}) => {
+            console.log(data);
+            dispatch({type: FETCH_LESSON, payload: data});
+        });
+    };
+}*/
+
+export function fetchLesson() {
+
+    const request = axios.get(`${ROOT_URL}/schedule`);
 
     return(dispatch) => {
         request.then(({data}) => {

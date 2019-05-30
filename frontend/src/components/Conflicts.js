@@ -5,8 +5,6 @@ import {Spinner} from "react-bootstrap";
 import '../App.css';
 import Jumbotron from 'react-bootstrap/Jumbotron'
 import TabContainer from "react-bootstrap/es/TabContainer";
-import ConflictLesson from "./ConflictLesson";
-//import { connectRouter } from "connected-react-router";
 
 
 class Conflicts extends Component {
@@ -31,15 +29,17 @@ class Conflicts extends Component {
 
 
     parseConflicts(conflicts) {
-        return conflicts.map( conflict => {
+        return conflicts.map( (conflict, index) => {
             return (
+                <div key={ index }>
                 <Jumbotron fluid style={{padding: "20px"}}>
                     <TabContainer>
                         <h2>{ conflict.typeOfConflict }</h2>
-                        <p>{ conflict.lessonId1 }</p>
-                        <p>{ conflict.lessonId2 }</p>
+                        <h5>{ conflict.lesson1.subject.name }</h5>
+                        <h5>{ conflict.lesson2.subject.name }</h5>
                     </TabContainer>
                 </Jumbotron>
+                </div>
         );
         });
     }
