@@ -1,5 +1,6 @@
 package ioiobagiety.service;
 
+import ioiobagiety.exception.BadRequestException;
 import ioiobagiety.exception.ResourceNotFoundException;
 import ioiobagiety.model.classes.Lesson;
 
@@ -12,6 +13,8 @@ public interface LessonService {
     Lesson getLesson(Long id) throws ResourceNotFoundException;
 
     List<Lesson> getLessonsFromScheduleName(String name) throws ResourceNotFoundException;
+
+    List<Lesson> getLessonsFromClassroomId(Long id);
 
     List<Lesson> getAll() throws ResourceNotFoundException;
 

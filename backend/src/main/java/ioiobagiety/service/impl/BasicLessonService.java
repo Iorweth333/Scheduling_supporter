@@ -40,6 +40,11 @@ public class BasicLessonService implements LessonService {
     }
 
     @Transactional
+    public List<Lesson> getLessonsFromClassroomId(Long id) {
+        return lessonRepository.findByClassroomId(id);
+    }
+
+    @Transactional
     public List<Lesson> getAll() {
         List<Lesson> lessons = lessonRepository.findAll();
         if (lessons.size() > 0) {
