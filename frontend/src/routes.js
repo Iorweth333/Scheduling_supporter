@@ -11,7 +11,6 @@ export default () => (
             <Route exact path="/" component={App}/>
             <Route exact path="/upload" component={Upload}/>
             <Route exact path="/lessons" component={SchedulerCalendar}/>
-            <Route exact path="/conflicts" component={Conflicts}/>
         </Switch>
     </BrowserRouter>
 );

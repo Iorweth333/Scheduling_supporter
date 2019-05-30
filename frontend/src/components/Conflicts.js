@@ -5,6 +5,7 @@ import {Spinner} from "react-bootstrap";
 import '../App.css';
 import Jumbotron from 'react-bootstrap/Jumbotron'
 import TabContainer from "react-bootstrap/es/TabContainer";
+import Conflict from "./Conflict";
 
 
 export class Conflicts extends Component {
@@ -34,9 +35,9 @@ export class Conflicts extends Component {
                 <div key={ index }>
                 <Jumbotron fluid style={{padding: "20px"}}>
                     <TabContainer>
-                        <h2>{ conflict.typeOfConflict }</h2>
-                        <h5>{ conflict.lesson1.subject.name }</h5>
-                        <h5>{ conflict.lesson2.subject.name }</h5>
+                        <h4 className="conflicts">{ conflict.typeOfConflict } CONFLICT</h4>
+                        <Conflict lesson={ conflict.lesson1 }/>
+                        <Conflict lesson={ conflict.lesson2 }/>
                     </TabContainer>
                 </Jumbotron>
                 </div>
@@ -77,20 +78,6 @@ export class Conflicts extends Component {
 
         return (
             <div>
-                <div className="header">
-                    <div style={{padding: "50px"}}>
-                        <div className="row"><div className="col-xs-12">
-                            <div className="buttons_line">
-                            <div className="divider">
-                                <button className="btn btn-success" onClick={this.redirectToUpload}>Upload Schedule</button>
-                            </div>
-                            <div className="divider">
-                                <button className="btn btn-success" onClick={this.redirectToLessons}>Lessons</button>
-                            </div>
-                            </div>
-                        </div></div>
-                    </div>
-                </div>
                 <div className="Conflicts">
                     {this.state.conflicts}
                 </div>

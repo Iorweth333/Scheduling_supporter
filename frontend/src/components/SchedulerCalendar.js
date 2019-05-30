@@ -9,6 +9,7 @@ import {Button, Spinner} from "react-bootstrap";
 import { MdModeEdit } from "react-icons/md";
 import Lesson from "./Lesson";
 import Conflicts from "./Conflicts";
+import containerResizeDetector from 'react-calendar-timeline/lib/resize-detector/container'
 
 var keys = {
     groupIdKey: "id",
@@ -205,10 +206,6 @@ class SchedulerCalendar extends Component {
         this.setState({modalShow: true, currentlesson: lesson});
     }
 
-    handleConflictsClick = () => {
-        this.props.history.push(`/conflicts`)
-    };
-
 
     itemRenderer({item,itemContext,getItemProps,getResizeProps}){
 
@@ -259,25 +256,22 @@ class SchedulerCalendar extends Component {
                         <div className="row"><div className="col-xs-12">
                             <div className="buttons_line">
                                 <div className="divider">
-                                    <button className="btn btn-success" onClick={this.handlePrevDay}>prevDay</button>
+                                    <button className="btn btn-success" onClick={this.handlePrevDay}>previous day</button>
                                 </div>
                                 <div className="divider">
-                                    <button className="btn btn-success" onClick={this.handleNextDay}>nextDay</button>
+                                    <button className="btn btn-success" onClick={this.handleNextDay}>next day</button>
                                 </div>
                                 <div className="divider">
-                                    <button className="btn btn-success" onClick={this.handlePrevMonth}>prevMonth</button>
+                                    <button className="btn btn-success" onClick={this.handlePrevMonth}>previous month</button>
                                 </div>
                                 <div className="divider">
-                                    <button className="btn btn-success" onClick={this.handleNextMonth}>nextMonth</button>
+                                    <button className="btn btn-success" onClick={this.handleNextMonth}>next month</button>
                                 </div>
                                 <div className="divider">
-                                    <button className="btn btn-success" onClick={this.handlePrevYear}>prevYear</button>
+                                    <button className="btn btn-success" onClick={this.handlePrevYear}>previous year</button>
                                 </div>
                                 <div className="divider">
-                                    <button className="btn btn-success" onClick={this.handleNextYear}>nextYear</button>
-                                </div>
-                                <div className="divider">
-                                    <button className="btn btn-success" onClick={this.handleConflictsClick}>conflicts</button>
+                                    <button className="btn btn-success" onClick={this.handleNextYear}>next year</button>
                                 </div>
                             </div></div></div>
                     </div>
@@ -307,6 +301,7 @@ class SchedulerCalendar extends Component {
                         onItemMove={this.handleItemMove}
                         onItemResize={this.handleItemResize}
                         onTimeChange={this.handleTimeChange}
+                        resizeDetector={containerResizeDetector}
                     />
 
                     <Lesson
@@ -314,6 +309,8 @@ class SchedulerCalendar extends Component {
                         onHide={modalClose}
                         currentlesson={this.state.currentlesson}
                     />
+                <p/>
+                <Conflicts/>
             </div>
         );
     }

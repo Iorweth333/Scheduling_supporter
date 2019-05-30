@@ -10,3 +10,13 @@
 .buttons_line {
   text-align: left;
 }
+
+.conflicts {
+  color: #c52020;
+  font-weight: bold;
+}
+
+.conflict {
+  margin-top: 2rem;
+  font-weight: bold;
+}
