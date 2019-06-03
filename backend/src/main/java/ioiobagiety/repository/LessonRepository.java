@@ -18,6 +18,8 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
     
     List<Lesson> findByLecturer(AppUser appUser);
   
+    List<Lesson> findByClassroomId(Long id);
+
     @Query(value = "SELECT date FROM lesson GROUP BY date", nativeQuery = true)
     List<Date> getDates();
 

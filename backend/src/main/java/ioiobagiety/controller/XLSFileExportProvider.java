@@ -10,9 +10,9 @@ import java.io.IOException;
 import java.util.List;
 
 public class XLSFileExportProvider {
-    private static String[] columns = {"MeetingNumber", "Date", "Hours", "Group", "Subject", "Classroom", "Lecturer"};
     public static final String FILENAME = "schedule.xls";
     public static final String PATH = "uploads/" + FILENAME;
+    private static String[] columns = {"MeetingNumber", "Date", "Hours", "Group", "Subject", "Classroom", "Lecturer"};
 
     public static void provideFile(List<Lesson> lessons) throws IOException {
         Workbook workbook = new XSSFWorkbook();
