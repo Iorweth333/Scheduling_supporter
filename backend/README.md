@@ -31,9 +31,11 @@ Required keys for:
 ### Export endpoints
 Endpoints returning schedule in JSON:
 ```sh
-localhost:8080/schedule                 -- all lessons
-localhost:8080/schedule/{id}            -- specific lesson
-localhost:8080/schedule/name/{name}     -- specific schedule
+localhost:8080/schedule                             -- all lessons
+localhost:8080/schedule/{id}                        -- specific lesson
+localhost:8080/schedule/name/{name}                 -- specific schedule
+localhost:8080/schedule/lecturer/{surname}          -- lessons for lecturer surname
+localhost:8080/schedule/lecturer/{name}/{surname}   -- lessons for lecturer name and surname
 ```
 
 Endpoints returning schedule in XLS file:

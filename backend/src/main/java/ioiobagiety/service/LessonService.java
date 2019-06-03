@@ -19,4 +19,9 @@ public interface LessonService {
     List<Lesson> getAll() throws ResourceNotFoundException;
 
     List<Lesson> getLessonsFromGroupName(String name) throws ResourceNotFoundException;
+    
+    List<Lesson> getLessonsFromLecturerSurname(String name) throws ResourceNotFoundException;
+
+    List<Lesson> getLessonsFromLecturerNameAndSurname(String name, String surname) throws
+            ResourceNotFoundException;
 }
