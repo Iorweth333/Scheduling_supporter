@@ -40,11 +40,18 @@ const normalStyle={
 class SchedulerCalendar extends Component {
 
     getGroups(studentsGroup) {
-        console.log(studentsGroup)
         return _.uniqBy(studentsGroup, 'id').map(studentGroup =>{
             return {id: studentGroup.id,
                     name: studentGroup.name,
                     students: studentGroup.students,
+            }
+        });
+    }
+
+    getClassrooms(classrooms) {
+        return _.uniqBy(classrooms, 'id').map(classroom =>{
+            return {id: classroom.id,
+                number: classroom.number,
             }
         });
     }
@@ -143,6 +150,7 @@ class SchedulerCalendar extends Component {
         let groups = this.parseLecturers(nextProps.lessons.map(({ lecturer }) => lecturer));
         groups.push({ id: 0, title: 'CS', root: true });
         let allGroups = this.getGroups(nextProps.lessons.map(({ studentsGroup }) => studentsGroup));
+        let allClassrooms = this.getClassrooms(nextProps.lessons.map(({ classroom}) => classroom));
 
         this.setState({
             lessons: nextProps.lessons,
@@ -150,6 +158,7 @@ class SchedulerCalendar extends Component {
             items: this.parseLessons(nextProps.lessons),
             currentlesson: nextProps.lessons[0],
             allGroups: allGroups,
+            allClassrooms: allClassrooms,
         });
         this.checkConflicts();
     }
@@ -387,6 +396,7 @@ class SchedulerCalendar extends Component {
                         onHide={modalClose}
                         currentlesson={this.state.currentlesson}
                         allGroups={this.state.allGroups}
+                        allClassrooms={this.state.allClassrooms}
                     />
                 <p/>
                 <Conflicts/>

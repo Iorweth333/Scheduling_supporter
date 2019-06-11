@@ -25,6 +25,14 @@ export default class Lesson extends Component {
         } );
     }
 
+    renderClassrooms(allClassrooms) {
+        return allClassrooms.map( (classroom, index) => {
+            return (
+                <option value={classroom.number}>{classroom.number}</option>
+            )
+        } );
+    }
+
     render() {
         return (
             <Modal
@@ -36,7 +44,6 @@ export default class Lesson extends Component {
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
                         {this.props.currentlesson.subject.name}
-                        {this.props.currentlesson.studentsGroup.name}
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -55,7 +62,9 @@ export default class Lesson extends Component {
                         <label>Ends at{' '}</label>
                         <br/>
                         <label>Classroom{' '}
-                            <input type="text" value={this.props.currentlesson.classroom.number}/>
+                            <select value={this.props.currentlesson.classroom.number}>
+                                {this.renderClassrooms(this.props.allClassrooms)}
+                            </select>
                         </label>
                     </form>
                 </Modal.Body>
