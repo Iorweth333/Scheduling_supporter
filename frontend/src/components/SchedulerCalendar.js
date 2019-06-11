@@ -8,6 +8,8 @@ import {connect} from "react-redux";
 import {Spinner} from "react-bootstrap";
 import { MdModeEdit } from "react-icons/md";
 import Lesson from "./Lesson";
+import Conflicts from "./Conflicts";
+import containerResizeDetector from 'react-calendar-timeline/lib/resize-detector/container'
 
 var keys = {
     groupIdKey: "id",
@@ -82,7 +84,7 @@ class SchedulerCalendar extends Component {
     }
 
     componentDidMount() {
-        if(this.props.loading){
+        if (this.props.loading) {
             this.props.fetchLessons();
         }
     }
@@ -223,7 +225,6 @@ class SchedulerCalendar extends Component {
         this.setState({modalShow: true, currentlesson: lesson});
     }
 
-
     handleButton(value){
         if(this.state.visibleTimeStart && this.state.visibleTimeEnd) {
             this.handleTimeChange(this.state.visibleTimeStart + value, this.state.visibleTimeEnd + value);
@@ -274,46 +275,66 @@ class SchedulerCalendar extends Component {
 
         return (
             <div>
-                <button onClick={() => this.handleButton(-1*DAY)}>prevDay</button>
-                <button onClick={() => this.handleButton(DAY)}>nextDay</button>
-                <button onClick={() => this.handleButton(-1*MONTH)}>prevMonth</button>
-                <button onClick={() => this.handleButton(MONTH)}>nextMonth</button>
-                <button onClick={() => this.handleButton(-1*YEAR)}>prevYear</button>
-                <button onClick={() => this.handleButton(YEAR)}>nextYear</button>
+                <div className="header">
+                    <div style={{padding: "50px"}}>
+                        <div className="row"><div className="col-xs-12">
+                            <div className="buttons_line">
+                                <div className="divider">
+                                    <button className="btn btn-success" onClick={this.handlePrevDay}>previous day</button>
+                                </div>
+                                <div className="divider">
+                                    <button className="btn btn-success" onClick={this.handleNextDay}>next day</button>
+                                </div>
+                                <div className="divider">
+                                    <button className="btn btn-success" onClick={this.handlePrevMonth}>previous month</button>
+                                </div>
+                                <div className="divider">
+                                    <button className="btn btn-success" onClick={this.handleNextMonth}>next month</button>
+                                </div>
+                                <div className="divider">
+                                    <button className="btn btn-success" onClick={this.handlePrevYear}>previous year</button>
+                                </div>
+                                <div className="divider">
+                                    <button className="btn btn-success" onClick={this.handleNextYear}>next year</button>
+                                </div>
+                            </div></div></div>
+                    </div>
+                </div>
+                    <Timeline
+                        groups={this.newGroups(groups, openGroups)}
+                        items={items}
+                        keys={keys}
+                        fixedHeader="fixed"
+                        sidebarWidth={250}
+                        lineHeight={60}
+                        sidebarContent={<div></div>}
+                        canMove
+                        canResize="right"
+                        canSelect
+                        itemsSorted
+                        itemRenderer={this.itemRenderer}
+                        itemTouchSendsClick={false}
+                        stackItems
+                        itemHeightRatio={0.85}
+                        showCursorLine
+                        defaultTimeStart={defaultTimeStart}
+                        defaultTimeEnd={defaultTimeEnd}
+                        visibleTimeStart={visibleTimeStart}
+                        visibleTimeEnd={visibleTimeEnd}
+                        onItemDoubleClick={this.handleLessonClick}
+                        onItemMove={this.handleItemMove}
+                        onItemResize={this.handleItemResize}
+                        onTimeChange={this.handleTimeChange}
+                        resizeDetector={containerResizeDetector}
+                    />
 
-                <Timeline
-                    groups={this.newGroups(groups, openGroups)}
-                    items={items}
-                    keys={keys}
-                    fixedHeader="fixed"
-                    sidebarWidth={250}
-                    lineHeight={60}
-                    sidebarContent={<div></div>}
-                    canMove
-                    canResize="right"
-                    canSelect
-                    itemsSorted
-                    itemRenderer={this.itemRenderer}
-                    itemTouchSendsClick={false}
-                    stackItems
-                    itemHeightRatio={0.85}
-                    showCursorLine
-                    defaultTimeStart={defaultTimeStart}
-                    defaultTimeEnd={defaultTimeEnd}
-                    visibleTimeStart={visibleTimeStart}
-                    visibleTimeEnd={visibleTimeEnd}
-                    onItemDoubleClick={this.handleLessonClick}
-                    onItemMove={this.handleItemMove}
-                    onItemResize={this.handleItemResize}
-                    onTimeChange={this.handleTimeChange}
-                />
-
-                <Lesson
-                    show={this.state.modalShow}
-                    onHide={modalClose}
-                    currentlesson={this.state.currentlesson}
-                />
-
+                    <Lesson
+                        show={this.state.modalShow}
+                        onHide={modalClose}
+                        currentlesson={this.state.currentlesson}
+                    />
+                <p/>
+                <Conflicts/>
             </div>
         );
     }

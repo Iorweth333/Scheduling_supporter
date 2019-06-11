@@ -47,15 +47,18 @@ public class ConflictsFinderServiceImpl implements ConflictsFinderService {
                     LocalTime lesson1End = LocalTime.MIDNIGHT.plus(sqlLesson1End.getTime(), ChronoUnit.MILLIS);
                     if(lesson2Start.isBefore(lesson1End)) {
                         if(lesson1.getLecturer().equals(lesson2.getLecturer())) {
-                            Conflict conflict = new Conflict(Conflict.conflictType.LECTURER, lesson1.getId(), lesson2.getId());
+                            //Conflict conflict = new Conflict(Conflict.conflictType.LECTURER, lesson1.getId(), lesson2.getId());
+                            Conflict conflict = new Conflict(Conflict.conflictType.LECTURER, lesson1, lesson2);
                             conflicts.add(conflict);
                         }
                         if(lesson1.getStudentsGroup().equals(lesson2.getStudentsGroup())) {
-                            Conflict conflict = new Conflict(Conflict.conflictType.GROUP, lesson1.getId(), lesson2.getId());
+                            //Conflict conflict = new Conflict(Conflict.conflictType.GROUP, lesson1.getId(), lesson2.getId());
+                            Conflict conflict = new Conflict(Conflict.conflictType.GROUP, lesson1, lesson2);
                             conflicts.add(conflict);
                         }
                         if(lesson1.getClassroom().equals(lesson2.getClassroom())) {
-                            Conflict conflict = new Conflict(Conflict.conflictType.CLASSROOM, lesson1.getId(), lesson2.getId());
+                            //Conflict conflict = new Conflict(Conflict.conflictType.CLASSROOM, lesson1.getId(), lesson2.getId());
+                            Conflict conflict = new Conflict(Conflict.conflictType.CLASSROOM, lesson1, lesson2);
                             conflicts.add(conflict);
                         }
                     }

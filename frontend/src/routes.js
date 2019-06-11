@@ -3,6 +3,7 @@ import {BrowserRouter, Route, Switch} from "react-router-dom";
 import App from "./components/App";
 import Upload from "./components/Upload";
 import SchedulerCalendar from "./components/SchedulerCalendar";
+import Conflicts from "./components/Conflicts";
 
 export default () => (
     <BrowserRouter>
