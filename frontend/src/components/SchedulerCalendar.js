@@ -275,6 +275,9 @@ class SchedulerCalendar extends Component {
 
         return (
             <div>
+                <header className="headerMain">
+                    <h2 className="logo">Scheduling Supporter</h2>
+                </header>
                 <div className="header">
                     <div style={{padding: "50px"}}>
                         <div className="row"><div className="col-xs-12">
