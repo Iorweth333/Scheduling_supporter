@@ -9,7 +9,7 @@ import java.util.List;
 public interface LessonService {
     Lesson create(Lesson lesson) throws BadRequestException;
 
-    Lesson get(Long id) throws ResourceNotFoundException;
+    Lesson getLesson(Long id) throws ResourceNotFoundException;
 
     List<Lesson> get(String name) throws ResourceNotFoundException;
 

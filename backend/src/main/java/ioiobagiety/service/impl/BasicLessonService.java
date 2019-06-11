@@ -22,7 +22,7 @@ public class BasicLessonService implements LessonService {
     }
 
     @Transactional
-    public Lesson get(Long id) {
+    public Lesson getLesson(Long id) {
         return lessonRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lesson not found"));
     }
 
