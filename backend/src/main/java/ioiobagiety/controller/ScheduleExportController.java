@@ -37,8 +37,30 @@ public class ScheduleExportController {
 
     @CrossOrigin(maxAge = 3600)
     @RequestMapping(value = "/name/{name}", method = RequestMethod.GET)
-    public ResponseEntity<String> getFromName(@PathVariable("name") String name) {
-        List<Lesson> lessons = lessonService.get(name);
+    public ResponseEntity<String> getFromScheduleName(@PathVariable("name") String name) {
+        List<Lesson> lessons = lessonService.getLessonsFromScheduleName(name);
+        if (lessons.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(gson.toJson(lessons), HttpStatus.OK);
+        }
+    }
+
+    @CrossOrigin(maxAge = 3600)
+    @RequestMapping(value = "/lecturer/{surname}", method = RequestMethod.GET)
+    public ResponseEntity<String> getFromLecturerSurname(@PathVariable("surname") String name) {
+        List<Lesson> lessons = lessonService.getLessonsFromLecturerSurname(name);
+        if (lessons.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(gson.toJson(lessons), HttpStatus.OK);
+        }
+    }
+
+    @CrossOrigin(maxAge = 3600)
+    @RequestMapping(value = "/lecturer/{name}/{surname}", method = RequestMethod.GET)
+    public ResponseEntity<String> getFromLecturerNameAndSurname(@PathVariable("name") String name, @PathVariable("surname") String surname) {
+        List<Lesson> lessons = lessonService.getLessonsFromLecturerNameAndSurname(name, surname);
         if (lessons.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {

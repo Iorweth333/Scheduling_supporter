@@ -52,7 +52,7 @@ public class XLSFileImportController {
     public void XLSFileImport(MultipartFile file) {
         try {
             XLSFileImportProvider parser = new XLSFileImportProvider(file);
-            parser.getLessons().forEach(lessonService::create);
+            parser.getLessons().forEach(lessonService::createLesson);
         } catch (XLSParseException e) {
             logger.info(e.getMessage());
         }

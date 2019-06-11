@@ -5,7 +5,7 @@ import Timeline from "react-calendar-timeline";
 import _ from "lodash";
 import {fetchLessons} from "../actions";
 import {connect} from "react-redux";
-import {Button, Spinner} from "react-bootstrap";
+import {Spinner} from "react-bootstrap";
 import { MdModeEdit } from "react-icons/md";
 import Lesson from "./Lesson";
 import Conflicts from "./Conflicts";
@@ -27,6 +27,15 @@ var keys = {
 const DAY = 86400000;
 const MONTH = 2678400000;
 const YEAR = 31536000000;
+
+const conflictStyle={
+    backgroundColor: "red",
+    position:"relative",
+    display: "inline-block"
+};
+const normalStyle={
+    position:"relative", display: "inline-block"
+};
 
 class SchedulerCalendar extends Component {
 
@@ -63,19 +72,60 @@ class SchedulerCalendar extends Component {
             let date = moment(row.date).format("YYYY-MM-DD");
             return {
                 id: row.id,
-                group: row.lecturer.id,
+                group: row.lecturer.id,             // <- group to nie grupa tylko id prowadzacego, wymagane przez timeline pole musi sie tak nazywac :/
                 title: row.subject.name,
-                start: moment(date + "T" + moment(row.startsAt, 'hh:mm a').format('HH:mm:ss')),
-                end: moment(date + "T" + moment(row.endsAt, 'hh:mm a').format('HH:mm:ss')),
+                start: moment(date + "T" + moment(row.startsAt, 'hh:mm a').format('HH:mm:ss')).valueOf(),
+                end: moment(date + "T" + moment(row.endsAt, 'hh:mm a').format('HH:mm:ss')).valueOf(),
+                lecturer: row.lecturer,
+                classroom: row.classroom,
+                studentsGroup: row.studentsGroup
             }
         })
     }
 
-
-
     componentDidMount() {
         if (this.props.loading) {
             this.props.fetchLessons();
+        }
+    }
+
+    checkConflicts(){
+        const {items} = this.state;
+        let newConflictList = [];
+        if(items) {
+
+            items.forEach(lesson1 => {
+                items.forEach(lesson2 => {
+                    if (lesson1.id !== lesson2.id) {
+                        if (lesson1.start <= lesson2.end && lesson1.end >= lesson2.start) {
+                            if (lesson1.group === lesson2.group) {
+                                newConflictList.push({
+                                    typeOfConflict: "LECTURER",
+                                    lessonId1: lesson1.id,
+                                    lessonId2: lesson2.id
+                                });
+                            }
+                            if (lesson1.classroom.id === lesson2.classroom.id) {
+                                newConflictList.push({
+                                    typeOfConflict: "CLASSROOM",
+                                    lessonId1: lesson1.id,
+                                    lessonId2: lesson2.id
+                                });
+                            }
+                            if (lesson1.studentsGroup.id === lesson2.studentsGroup.id) {
+                                newConflictList.push({
+                                    typeOfConflict: "GROUP",
+                                    lessonId1: lesson1.id,
+                                    lessonId2: lesson2.id
+                                });
+                            }
+                        }
+                    }
+                });
+            });
+            this.setState({
+                lessonsConflicts: newConflictList,
+            });
         }
     }
 
@@ -88,7 +138,8 @@ class SchedulerCalendar extends Component {
             groups: groups,
             items: this.parseLessons(nextProps.lessons),
             currentlesson: nextProps.lessons[0],
-        })
+        });
+        this.checkConflicts();
     }
 
     constructor(props) {
@@ -106,17 +157,14 @@ class SchedulerCalendar extends Component {
             visibleTimeStart: null,
             visibleTimeEnd: null,
             modalShow: false,
-            currentlesson: null
+            currentlesson: null,
+            lessonsConflicts: []
         };
         this.handleTimeChange = this.handleTimeChange.bind(this);
-        this.handlePrevMonth = this.handlePrevMonth.bind(this);
-        this.handleNextMonth = this.handleNextMonth.bind(this);
-        this.handlePrevDay = this.handlePrevDay.bind(this);
-        this.handleNextDay = this.handleNextDay.bind(this);
-        this.handlePrevYear = this.handlePrevYear.bind(this);
-        this.handleNextYear = this.handleNextYear.bind(this);
         this.itemRenderer = this.itemRenderer.bind(this);
+        this.checkConflicts = this.checkConflicts.bind(this);
         this.handleLessonClick = this.handleLessonClick.bind(this);
+        this.handleButton = this.handleButton.bind(this);
     }
 
     handleTimeChange(visibleTimeStart, visibleTimeEnd){
@@ -124,6 +172,7 @@ class SchedulerCalendar extends Component {
             visibleTimeStart: visibleTimeStart,
             visibleTimeEnd: visibleTimeEnd
         });
+        this.checkConflicts();
     }
     toggleGroup = id => {
         const { openGroups } = this.state;
@@ -152,6 +201,7 @@ class SchedulerCalendar extends Component {
                     : item
             )
         });
+        this.checkConflicts();
     };
 
     handleItemResize = (itemId, time, edge) => {
@@ -167,62 +217,36 @@ class SchedulerCalendar extends Component {
                     : item
             )
         });
+        this.checkConflicts();
     };
-
-    handlePrevDay(){
-        if(this.state.visibleTimeStart && this.state.visibleTimeEnd) {
-            this.handleTimeChange(this.state.visibleTimeStart - DAY, this.state.visibleTimeEnd - DAY);
-        }
-    }
-    handleNextDay(){
-        if(this.state.visibleTimeStart && this.state.visibleTimeEnd) {
-            this.handleTimeChange(this.state.visibleTimeStart + DAY, this.state.visibleTimeEnd + DAY);
-        }
-    }
-
-    handlePrevMonth(){
-        if(this.state.visibleTimeStart && this.state.visibleTimeEnd) {
-            this.handleTimeChange(this.state.visibleTimeStart - MONTH, this.state.visibleTimeEnd - MONTH);
-        }
-    }
-    handleNextMonth(){
-        if(this.state.visibleTimeStart && this.state.visibleTimeEnd) {
-            this.handleTimeChange(this.state.visibleTimeStart + MONTH, this.state.visibleTimeEnd + MONTH);
-        }
-    }
-    handlePrevYear(){
-        if(this.state.visibleTimeStart && this.state.visibleTimeEnd) {
-            this.handleTimeChange(this.state.visibleTimeStart - YEAR, this.state.visibleTimeEnd - YEAR);
-        }
-    }
-    handleNextYear(){
-        if(this.state.visibleTimeStart && this.state.visibleTimeEnd) {
-            this.handleTimeChange(this.state.visibleTimeStart + YEAR, this.state.visibleTimeEnd + YEAR);
-        }
-    }
 
     handleLessonClick(itemId, e, time){
         const lesson = this.state.lessons.find(lesson => lesson.id === itemId);
         this.setState({modalShow: true, currentlesson: lesson});
     }
 
+    handleButton(value){
+        if(this.state.visibleTimeStart && this.state.visibleTimeEnd) {
+            this.handleTimeChange(this.state.visibleTimeStart + value, this.state.visibleTimeEnd + value);
+        }
+    }
 
     itemRenderer({item,itemContext,getItemProps,getResizeProps}){
 
         const { left: leftResizeProps, right: rightResizeProps } = getResizeProps();
 
+        const conflict = this.state.lessonsConflicts.find(conflict => conflict.lessonId1 === item.id || conflict.lessonId2 === item.id);
+
         return (
-            <div {...getItemProps(item.itemProps)}>
-                <div style={{position:"relative", display: "inline-block"}}>
+            <div {...getItemProps(item.itemProps)}  >
+                <div style={conflict ? conflictStyle: normalStyle}>
                     <div className="rct-item-content" style={{ maxHeight: `${itemContext.dimensions.height}`, lineHeight: "15px", fontSize: "10px" }}>
                         {itemContext.title}
                         <MdModeEdit style={{position: "aboslute", bottom: "0px", right: "0px", width: "15px", cursor: "pointer"}}
                                     onClick={() => this.setState({ modalShow: true })}/>
                     </div>
                 </div>
-
             </div>
-
         )}
 
 
@@ -239,7 +263,7 @@ class SchedulerCalendar extends Component {
             visibleTimeEnd
         } = this.state;
 
-        const { error, loading, lessons } = this.props;
+        const { error, loading } = this.props;
 
         if (error) {
             return <div>Error! {error.message}</div>;
@@ -321,7 +345,7 @@ function mapStateToProps(state){
     return{
         loading: state.lessons.loading,
         error: state.lessons.error,
-        lessons: state.lessons.lessons
+        lessons: state.lessons.lessons,
     };
 }
 
