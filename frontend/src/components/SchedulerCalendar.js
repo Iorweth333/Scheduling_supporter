@@ -186,9 +186,31 @@ class SchedulerCalendar extends Component {
 
 
     handleItemMove = (itemId, dragTime, newGroupOrder) => {
-        const { items, groups } = this.state;
+        const { items, groups, lessons } = this.state;
 
         const group = groups[newGroupOrder];
+        const lecturer = items.find(item => item.lecturer.id == group.id).lecturer;
+
+
+        const newDate = moment(dragTime);
+        const lesson = lessons.find(lesson => lesson.id == itemId);
+
+
+        const duration = moment.duration(moment(`Jun 11, 2019, ${lesson.endsAt}`)
+            .diff(moment(`Jun 11, 2019, ${lesson.startsAt}`))).valueOf();
+
+
+        const newLesson = { ...lesson, date: newDate.toDate(),
+                                   startsAt: newDate.format("HH:mm:ss"),
+                                     endsAt: newDate.add(duration).format("HH:mm:ss"),
+                                   lecturer: lecturer};
+
+
+
+
+
+
+
 
         this.setState({
             items: items.map(item =>
@@ -196,10 +218,14 @@ class SchedulerCalendar extends Component {
                     ? Object.assign({}, item, {
                         start: dragTime,
                         end: dragTime + (item.end - item.start),
-                        group: group.id
+                        group: group.id,
+                        lecturer: lecturer
                     })
                     : item
-            )
+            ),
+            lessons: lessons.map(lesson => lesson.id === itemId
+                ? Object.assign({}, lesson, newLesson)
+                    : lesson)
         });
         this.checkConflicts();
     };
@@ -302,7 +328,7 @@ class SchedulerCalendar extends Component {
                 </div>
                     <Timeline
                         groups={this.newGroups(groups, openGroups)}
-                        items={items}
+                        items={this.parseLessons(this.state.lessons)}
                         keys={keys}
                         fixedHeader="fixed"
                         sidebarWidth={250}
@@ -334,7 +360,7 @@ class SchedulerCalendar extends Component {
                         currentlesson={this.state.currentlesson}
                     />
                 <p/>
-                <Conflicts/>
+                <Conflicts lessonsConflicts={this.state.lessonsConflicts}/>
             </div>
         );
     }

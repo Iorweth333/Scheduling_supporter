@@ -6,7 +6,6 @@ export const UPLOAD_FILE = 'UPLOAD_FILE';
 export const FETCH_LESSONS = 'FETCH_LESSONS';
 export const FETCH_CONFLICTS = 'FETCH_CONFLICTS';
 
-
 export function uploadFile(props, history){
 
     let formData = new FormData();
