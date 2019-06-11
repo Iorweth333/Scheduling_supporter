@@ -177,7 +177,46 @@ class SchedulerCalendar extends Component {
         this.checkConflicts = this.checkConflicts.bind(this);
         this.handleLessonClick = this.handleLessonClick.bind(this);
         this.handleButton = this.handleButton.bind(this);
+        this.handlePrevMonth = this.handlePrevMonth.bind(this);
+        this.handleNextMonth = this.handleNextMonth.bind(this);
+        this.handlePrevDay = this.handlePrevDay.bind(this);
+        this.handleNextDay = this.handleNextDay.bind(this);
+        this.handlePrevYear = this.handlePrevYear.bind(this);
+        this.handleNextYear = this.handleNextYear.bind(this);
     }
+
+    handlePrevDay(){
+        if(this.state.visibleTimeStart && this.state.visibleTimeEnd) {
+            this.handleTimeChange(this.state.visibleTimeStart - DAY, this.state.visibleTimeEnd - DAY);
+        }
+    }
+    handleNextDay(){
+        if(this.state.visibleTimeStart && this.state.visibleTimeEnd) {
+            this.handleTimeChange(this.state.visibleTimeStart + DAY, this.state.visibleTimeEnd + DAY);
+        }
+    }
+
+    handlePrevMonth(){
+        if(this.state.visibleTimeStart && this.state.visibleTimeEnd) {
+            this.handleTimeChange(this.state.visibleTimeStart - MONTH, this.state.visibleTimeEnd - MONTH);
+        }
+    }
+    handleNextMonth(){
+        if(this.state.visibleTimeStart && this.state.visibleTimeEnd) {
+            this.handleTimeChange(this.state.visibleTimeStart + MONTH, this.state.visibleTimeEnd + MONTH);
+        }
+    }
+    handlePrevYear(){
+        if(this.state.visibleTimeStart && this.state.visibleTimeEnd) {
+            this.handleTimeChange(this.state.visibleTimeStart - YEAR, this.state.visibleTimeEnd - YEAR);
+        }
+    }
+    handleNextYear(){
+        if(this.state.visibleTimeStart && this.state.visibleTimeEnd) {
+            this.handleTimeChange(this.state.visibleTimeStart + YEAR, this.state.visibleTimeEnd + YEAR);
+        }
+    }
+
 
     handleTimeChange(visibleTimeStart, visibleTimeEnd){
         this.setState({
