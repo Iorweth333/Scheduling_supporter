@@ -90,14 +90,20 @@ class SchedulerCalendar extends Component {
     }
 
     checkConflicts(){
-        const {items} = this.state;
+        const {lessons} = this.state;
         let newConflictList = [];
-        if(items) {
+        if(lessons) {
 
-            items.forEach(lesson1 => {
-                items.forEach(lesson2 => {
+            lessons.forEach(lesson1 => {
+                lessons.forEach(lesson2 => {
                     if (lesson1.id !== lesson2.id) {
-                        if (lesson1.start <= lesson2.end && lesson1.end >= lesson2.start) {
+
+                        const lesson1Start = this.dateAndTimeToValue(lesson1.date, lesson1.startsAt);
+                        const lesson1End =  this.dateAndTimeToValue(lesson1.date, lesson1.endsAt);
+                        const lesson2Start = this.dateAndTimeToValue(lesson2.date, lesson2.startsAt);
+                        const lesson2End =  this.dateAndTimeToValue(lesson2.date, lesson2.endsAt);
+
+                        if (lesson1Start <= lesson2End && lesson1End >= lesson2Start) {
                             if (lesson1.group === lesson2.group) {
                                 newConflictList.push({
                                     typeOfConflict: "LECTURER",
@@ -136,7 +142,6 @@ class SchedulerCalendar extends Component {
         this.setState({
             lessons: nextProps.lessons,
             groups: groups,
-            items: this.parseLessons(nextProps.lessons),
             currentlesson: nextProps.lessons[0],
         });
         this.checkConflicts();
@@ -149,7 +154,6 @@ class SchedulerCalendar extends Component {
 
         this.state = {
             groups: null,
-            items: null,
             lessons: null,
             defaultTimeStart: moment('2019-03-03').startOf("day").toDate(),
             defaultTimeEnd: moment('2019-03-03').startOf("day").add(1, "day").toDate(),
@@ -186,10 +190,11 @@ class SchedulerCalendar extends Component {
 
 
     handleItemMove = (itemId, dragTime, newGroupOrder) => {
-        const { items, groups, lessons } = this.state;
+        const { groups, lessons } = this.state;
 
         const group = groups[newGroupOrder];
-        const lecturer = items.find(item => item.lecturer.id == group.id).lecturer;
+
+        const lecturer = lessons.find(lesson => lesson.lecturer.id == group.id).lecturer;
 
 
         const newDate = moment(dragTime);
@@ -205,24 +210,7 @@ class SchedulerCalendar extends Component {
                                      endsAt: newDate.add(duration).format("HH:mm:ss"),
                                    lecturer: lecturer};
 
-
-
-
-
-
-
-
         this.setState({
-            items: items.map(item =>
-                item.id === itemId
-                    ? Object.assign({}, item, {
-                        start: dragTime,
-                        end: dragTime + (item.end - item.start),
-                        group: group.id,
-                        lecturer: lecturer
-                    })
-                    : item
-            ),
             lessons: lessons.map(lesson => lesson.id === itemId
                 ? Object.assign({}, lesson, newLesson)
                     : lesson)
@@ -231,18 +219,18 @@ class SchedulerCalendar extends Component {
     };
 
     handleItemResize = (itemId, time, edge) => {
-        const { items } = this.state;
-
-        this.setState({
-            items: items.map(item =>
-                item.id === itemId
-                    ? Object.assign({}, item, {
-                        start: edge === "left" ? time : item.start,
-                        end: edge === "left" ? item.end : time
-                    })
-                    : item
-            )
-        });
+        // const { items } = this.state;
+        //
+        // this.setState({
+        //     items: items.map(item =>
+        //         item.id === itemId
+        //             ? Object.assign({}, item, {
+        //                 start: edge === "left" ? time : item.start,
+        //                 end: edge === "left" ? item.end : time
+        //             })
+        //             : item
+        //     )
+        // });
         this.checkConflicts();
     };
 
@@ -284,7 +272,6 @@ class SchedulerCalendar extends Component {
             defaultTimeEnd,
             openGroups,
             groups,
-            items,
             visibleTimeStart,
             visibleTimeEnd
         } = this.state;
@@ -363,6 +350,10 @@ class SchedulerCalendar extends Component {
                 <Conflicts lessonsConflicts={this.state.lessonsConflicts}/>
             </div>
         );
+    }
+
+    dateAndTimeToValue(date, time){
+        return moment(date + "T" + moment(time, 'hh:mm a').format('HH:mm:ss')).valueOf();
     }
 }
 
