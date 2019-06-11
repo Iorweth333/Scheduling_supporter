@@ -5,6 +5,7 @@ const ROOT_URL = 'http://localhost:8080';
 export const UPLOAD_FILE = 'UPLOAD_FILE';
 export const FETCH_LESSONS = 'FETCH_LESSONS';
 export const FETCH_CONFLICTS = 'FETCH_CONFLICTS';
+export const SEND_LESSONS = 'SEND_LESSONS';
 
 export function uploadFile(props, history){
 
@@ -43,4 +44,18 @@ export function fetchConflicts() {
             dispatch({type: FETCH_CONFLICTS, payload: data});
         });
     };
+}
+
+export function sendLessons(lessons){
+
+    console.log(lessons);
+
+    const request = axios.post(`${ROOT_URL}/lessons`);
+
+    return(dispatch) => {
+        request.then(({data}) => {
+            dispatch({type: SEND_LESSONS, payload: lessons});
+        });
+    };
+
 }
