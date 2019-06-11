@@ -395,8 +395,8 @@ class SchedulerCalendar extends Component {
                         show={this.state.modalShow}
                         onHide={modalClose}
                         currentlesson={this.state.currentlesson}
-                        allGroups={this.state.allGroups}
-                        allClassrooms={this.state.allClassrooms}
+                        allgroups={this.state.allGroups}
+                        allclassrooms={this.state.allClassrooms}
                     />
                 <p/>
                 <Conflicts/>
