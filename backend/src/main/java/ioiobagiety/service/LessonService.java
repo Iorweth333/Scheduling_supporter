@@ -8,7 +8,11 @@ import java.util.List;
 
 public interface LessonService {
 
+<<<<<<< HEAD
     Lesson createLesson(Lesson lesson) throws BadRequestException;
+=======
+    Lesson getLesson(Long id) throws ResourceNotFoundException;
+>>>>>>> a77f960... [IOIOB-25]
 
     Lesson getLesson(Long id) throws ResourceNotFoundException;
 
