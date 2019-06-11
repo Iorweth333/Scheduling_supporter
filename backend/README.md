@@ -44,6 +44,11 @@ localhost:8080/schedule/xls                 -- all lessons
 localhost:8080/schedule/xls/{name}          -- schedule for given schedule name
 localhost:8080/schedule/xls/group/{name}    -- schedule for given group name
 ```
+### Conflicts endpoint
+```sh
+localhost:8080/conflicts
+```
+
 ### Test in-memory db
 H2 & Hibernate
 Auto executing ```/resources/init.sql``` to populate db
