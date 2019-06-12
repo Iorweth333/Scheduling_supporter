@@ -3,7 +3,7 @@ import moment from "moment";
 import 'react-calendar-timeline/lib/Timeline.css'
 import Timeline from "react-calendar-timeline";
 import _ from "lodash";
-import {fetchLessons} from "../actions";
+import {fetchLessons, sendLessons} from "../actions";
 import {connect} from "react-redux";
 import {Spinner} from "react-bootstrap";
 import { MdModeEdit } from "react-icons/md";
@@ -90,15 +90,24 @@ class SchedulerCalendar extends Component {
     }
 
     checkConflicts(){
-        const {items} = this.state;
+        const {lessons} = this.state;
         let newConflictList = [];
-        if(items) {
+        if(lessons) {
 
-            items.forEach(lesson1 => {
-                items.forEach(lesson2 => {
+
+            lessons.forEach((lesson1, index) => {
+                lessons.slice(index+1).forEach(lesson2 => {
                     if (lesson1.id !== lesson2.id) {
-                        if (lesson1.start <= lesson2.end && lesson1.end >= lesson2.start) {
-                            if (lesson1.group === lesson2.group) {
+
+                        const lesson1Start = this.dateAndTimeToValue(lesson1.date, lesson1.startsAt);
+                        const lesson1End =  this.dateAndTimeToValue(lesson1.date, lesson1.endsAt);
+                        const lesson2Start = this.dateAndTimeToValue(lesson2.date, lesson2.startsAt);
+                        const lesson2End =  this.dateAndTimeToValue(lesson2.date, lesson2.endsAt);
+
+
+
+                        if (lesson1Start <= lesson2End && lesson1End >= lesson2Start) {
+                            if (lesson1.lecturer.id === lesson2.lecturer.id) {
                                 newConflictList.push({
                                     typeOfConflict: "LECTURER",
                                     lessonId1: lesson1.id,
@@ -136,7 +145,6 @@ class SchedulerCalendar extends Component {
         this.setState({
             lessons: nextProps.lessons,
             groups: groups,
-            items: this.parseLessons(nextProps.lessons),
             currentlesson: nextProps.lessons[0],
         });
         this.checkConflicts();
@@ -149,7 +157,6 @@ class SchedulerCalendar extends Component {
 
         this.state = {
             groups: null,
-            items: null,
             lessons: null,
             defaultTimeStart: moment('2019-03-03').startOf("day").toDate(),
             defaultTimeEnd: moment('2019-03-03').startOf("day").add(1, "day").toDate(),
@@ -165,6 +172,7 @@ class SchedulerCalendar extends Component {
         this.checkConflicts = this.checkConflicts.bind(this);
         this.handleLessonClick = this.handleLessonClick.bind(this);
         this.handleButton = this.handleButton.bind(this);
+        this.handleOverride = this.handleOverride.bind(this);
     }
 
     handleTimeChange(visibleTimeStart, visibleTimeEnd){
@@ -186,37 +194,54 @@ class SchedulerCalendar extends Component {
 
 
     handleItemMove = (itemId, dragTime, newGroupOrder) => {
-        const { items, groups } = this.state;
+        const { groups, lessons } = this.state;
 
         const group = groups[newGroupOrder];
 
-        this.setState({
-            items: items.map(item =>
-                item.id === itemId
-                    ? Object.assign({}, item, {
-                        start: dragTime,
-                        end: dragTime + (item.end - item.start),
-                        group: group.id
-                    })
-                    : item
-            )
-        });
-        this.checkConflicts();
+        let lecturer = lessons.find(lesson => lesson.lecturer.id == group.id);
+
+        if(lecturer){
+            lecturer = lecturer.lecturer;
+
+            const newDate = moment(dragTime);
+            const lesson = lessons.find(lesson => lesson.id == itemId);
+
+
+            const duration = moment.duration(moment(`Jun 11, 2019, ${lesson.endsAt}`)
+                .diff(moment(`Jun 11, 2019, ${lesson.startsAt}`))).valueOf();
+
+
+            const newLesson = { ...lesson, date: newDate.format("lll"),
+                startsAt: newDate.format("HH:mm:ss"),
+                endsAt: newDate.add(duration).format("HH:mm:ss"),
+                lecturer: lecturer};
+
+            this.setState({
+                lessons: lessons.map(lesson => lesson.id === itemId
+                    ? Object.assign({}, lesson, newLesson)
+                    : lesson)
+            });
+            this.checkConflicts();
+        }
     };
 
     handleItemResize = (itemId, time, edge) => {
-        const { items } = this.state;
 
+        const { lessons } = this.state;
+
+        const lesson = lessons.find(lesson => lesson.id == itemId);
+
+        const newLesson = { ...lesson,
+                          startsAt: edge === "left" ? moment(time).format("HH:MM") : lesson.startsAt,
+                            endsAt: edge === "left" ? lesson.endsAt : moment(time).format("HH:MM")};
+
+        console.log(newLesson)
         this.setState({
-            items: items.map(item =>
-                item.id === itemId
-                    ? Object.assign({}, item, {
-                        start: edge === "left" ? time : item.start,
-                        end: edge === "left" ? item.end : time
-                    })
-                    : item
-            )
+            lessons: lessons.map(lesson => lesson.id === itemId
+                ? Object.assign({}, lesson, newLesson)
+                : lesson)
         });
+
         this.checkConflicts();
     };
 
@@ -229,6 +254,11 @@ class SchedulerCalendar extends Component {
         if(this.state.visibleTimeStart && this.state.visibleTimeEnd) {
             this.handleTimeChange(this.state.visibleTimeStart + value, this.state.visibleTimeEnd + value);
         }
+    }
+
+    handleOverride(){
+        console.log("override db");
+        this.props.sendLessons(this.state.lessons);
     }
 
     itemRenderer({item,itemContext,getItemProps,getResizeProps}){
@@ -258,7 +288,6 @@ class SchedulerCalendar extends Component {
             defaultTimeEnd,
             openGroups,
             groups,
-            items,
             visibleTimeStart,
             visibleTimeEnd
         } = this.state;
@@ -280,29 +309,29 @@ class SchedulerCalendar extends Component {
                         <div className="row"><div className="col-xs-12">
                             <div className="buttons_line">
                                 <div className="divider">
-                                    <button className="btn btn-success" onClick={this.handlePrevDay}>previous day</button>
+                                    <button className="btn btn-success" onClick={() => this.handleButton(-1*DAY)}>previous day</button>
                                 </div>
                                 <div className="divider">
-                                    <button className="btn btn-success" onClick={this.handleNextDay}>next day</button>
+                                    <button className="btn btn-success" onClick={() => this.handleButton(DAY)}>next day</button>
                                 </div>
                                 <div className="divider">
-                                    <button className="btn btn-success" onClick={this.handlePrevMonth}>previous month</button>
+                                    <button className="btn btn-success" onClick={() => this.handleButton(-1*MONTH)}>previous month</button>
                                 </div>
                                 <div className="divider">
-                                    <button className="btn btn-success" onClick={this.handleNextMonth}>next month</button>
+                                    <button className="btn btn-success" onClick={() => this.handleButton(MONTH)}>next month</button>
                                 </div>
                                 <div className="divider">
-                                    <button className="btn btn-success" onClick={this.handlePrevYear}>previous year</button>
+                                    <button className="btn btn-success" onClick={() => this.handleButton(-1*YEAR)}>previous year</button>
                                 </div>
                                 <div className="divider">
-                                    <button className="btn btn-success" onClick={this.handleNextYear}>next year</button>
+                                    <button className="btn btn-success" onClick={() => this.handleButton(YEAR)}>next year</button>
                                 </div>
                             </div></div></div>
                     </div>
                 </div>
                     <Timeline
                         groups={this.newGroups(groups, openGroups)}
-                        items={items}
+                        items={this.parseLessons(this.state.lessons)}
                         keys={keys}
                         fixedHeader="fixed"
                         sidebarWidth={250}
@@ -334,9 +363,18 @@ class SchedulerCalendar extends Component {
                         currentlesson={this.state.currentlesson}
                     />
                 <p/>
-                <Conflicts/>
+                {this.state.lessonsConflicts.length ? <Conflicts lessonsConflicts={this.state.lessonsConflicts}/>
+                    : <div>
+                        <button className="btn btn-success" onClick={this.handleOverride}>Override!</button>
+                    </div>
+                }
+
             </div>
         );
+    }
+
+    dateAndTimeToValue(date, time){
+        return moment(moment(date).format("ll") + " " + moment(time, 'hh:mm a').format('HH:mm:ss')).valueOf();
     }
 }
 
@@ -349,4 +387,4 @@ function mapStateToProps(state){
     };
 }
 
-export default connect(mapStateToProps, {fetchLessons})(SchedulerCalendar);
+export default connect(mapStateToProps, {fetchLessons, sendLessons})(SchedulerCalendar);
