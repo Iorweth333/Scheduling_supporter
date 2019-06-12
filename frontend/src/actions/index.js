@@ -4,6 +4,7 @@ const ROOT_URL = 'http://localhost:8080';
 
 export const UPLOAD_FILE = 'UPLOAD_FILE';
 export const FETCH_LESSONS = 'FETCH_LESSONS';
+export const FETCH_CLASSROOMS = 'FETCH_CLASSROOMS';
 export const FETCH_CONFLICTS = 'FETCH_CONFLICTS';
 export const SEND_LESSONS = 'SEND_LESSONS';
 
@@ -31,6 +32,17 @@ export function fetchLessons(){
     return(dispatch) => {
         request.then(({data}) =>{
             dispatch({type: FETCH_LESSONS, payload: data});
+        });
+    };
+}
+
+export function fetchClassrooms(){
+
+    const request = axios.get(`${ROOT_URL}/classroom`);
+
+    return(dispatch) => {
+        request.then(({data}) =>{
+            dispatch({type: FETCH_CLASSROOMS, payload: data});
         });
     };
 }
