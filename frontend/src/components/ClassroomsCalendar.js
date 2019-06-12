@@ -384,10 +384,10 @@ class SchedulerCalendar extends Component {
 
 function mapStateToProps(state){
     return{
-        loading: state.classrooms.loading,
-        error: state.classrooms.error,
-        lessons: state.classrooms.lessons,
-        classrooms: state.classrooms.classrooms,
+        loading: state.lessons.loading,
+        error: state.lessons.error,
+        lessons: state.lessons.lessons,
+        classrooms: state.lessons.classrooms,
     };
 }
 

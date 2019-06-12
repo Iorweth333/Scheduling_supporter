@@ -25,9 +25,8 @@ class Conflicts extends Component {
         }
 
         return lessonsConflicts.map( (conflict, index) => {
-
-            const lesson1 = lessons.find(lesson => lesson.id == conflict.lessonId1);
-            const lesson2 = lessons.find(lesson => lesson.id == conflict.lessonId2);
+            const lesson1 = lessons.find(lesson => lesson.id === conflict.lessonId1);
+            const lesson2 = lessons.find(lesson => lesson.id === conflict.lessonId2);
 
             return (
                 <div key={index}>
