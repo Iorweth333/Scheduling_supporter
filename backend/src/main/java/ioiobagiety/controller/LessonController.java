@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-public class LessonsController {
+public class LessonController {
 
     @Autowired
     private LessonService lessonService;
