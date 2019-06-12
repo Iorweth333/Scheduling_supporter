@@ -39,6 +39,23 @@ const normalStyle={
 
 class SchedulerCalendar extends Component {
 
+    getGroups(studentsGroup) {
+        return _.uniqBy(studentsGroup, 'id').map(studentGroup =>{
+            return {id: studentGroup.id,
+                    name: studentGroup.name,
+                    students: studentGroup.students,
+            }
+        });
+    }
+
+    getClassrooms(classrooms) {
+        return _.uniqBy(classrooms, 'id').map(classroom =>{
+            return {id: classroom.id,
+                number: classroom.number,
+            }
+        });
+    }
+
     parseLecturers(lecturers){
         return _.uniqBy(lecturers, 'id').map( lecturer =>{
             return {id: lecturer.id,
@@ -140,12 +157,16 @@ class SchedulerCalendar extends Component {
 
     componentWillReceiveProps(nextProps, nextContext) {
         let groups = this.parseLecturers(nextProps.lessons.map(({ lecturer }) => lecturer));
-            groups.push({ id: 0, title: 'CS', root: true });
+        groups.push({ id: 0, title: 'CS', root: true });
+        let allGroups = this.getGroups(nextProps.lessons.map(({ studentsGroup }) => studentsGroup));
+        let allClassrooms = this.getClassrooms(nextProps.lessons.map(({ classroom}) => classroom));
 
         this.setState({
             lessons: nextProps.lessons,
             groups: groups,
             currentlesson: nextProps.lessons[0],
+            allGroups: allGroups,
+            allClassrooms: allClassrooms,
         });
         this.checkConflicts();
     }
@@ -174,6 +195,7 @@ class SchedulerCalendar extends Component {
         this.handleButton = this.handleButton.bind(this);
         this.handleOverride = this.handleOverride.bind(this);
     }
+
 
     handleTimeChange(visibleTimeStart, visibleTimeEnd){
         this.setState({
@@ -304,6 +326,9 @@ class SchedulerCalendar extends Component {
 
         return (
             <div>
+                <header className="headerMain">
+                    <h2 className="logo">Scheduling Supporter</h2>
+                </header>
                 <div className="header">
                     <div style={{padding: "50px"}}>
                         <div className="row"><div className="col-xs-12">
@@ -361,6 +386,8 @@ class SchedulerCalendar extends Component {
                         show={this.state.modalShow}
                         onHide={modalClose}
                         currentlesson={this.state.currentlesson}
+                        allgroups={this.state.allGroups}
+                        allclassrooms={this.state.allClassrooms}
                     />
                 <p/>
                 {this.state.lessonsConflicts.length ? <Conflicts lessonsConflicts={this.state.lessonsConflicts}/>
