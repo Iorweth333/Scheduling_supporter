@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Modal, Button} from 'react-bootstrap';
-import {forEach} from "react-bootstrap/es/utils/ElementChildren";
 
 export default class Lesson extends Component {
 
@@ -10,10 +9,15 @@ export default class Lesson extends Component {
         this.state = {
             group: this.props.currentlesson.studentsGroup.name,
             classroom: this.props.currentlesson.classroom.number,
+            startsAt: this.props.currentlesson.startsAt,
+            endsAt: this.props.currentlesson.endsAt,
         };
 
         this.handleGroupChange = this.handleGroupChange.bind(this);
         this.handleClassroomChange = this.handleClassroomChange.bind(this);
+        this.handleTimeOfDayStartChange = this.handleTimeOfDayStartChange.bind(this);
+        this.handleHourStartChange = this.handleHourStartChange.bind(this);
+        this.handleMinuteStartChange = this.handleMinuteStartChange.bind(this);
     }
 
     renderGroups(allGroups) {
@@ -30,6 +34,48 @@ export default class Lesson extends Component {
                 <option value={classroom.number} key={index}>{classroom.number}</option>
             )
         } );
+    }
+
+    renderHoursStart() {
+        let hours = [];
+
+        for (let i = 1; i < 13; i++) {
+            let minute = i.toString().padStart(2, '0');
+            hours.push(<option value={minute} key={minute}>{minute}</option>);
+        }
+        let hour = this.props.currentlesson.startsAt.substring(0,2);
+        return (
+            <select value={hour} onChange={this.handleHourStartChange}>
+                {hours}
+            </select>
+
+        )
+    }
+
+    renderMinutesStart() {
+        let minutes = [];
+
+        for (let i = 0; i < 60; i++) {
+            let minute = i.toString().padStart(2, '0');
+            minutes.push(<option value={minute} key={minute}>{minute}</option>);
+        }
+        let minute = this.props.currentlesson.startsAt.substring(3,5);
+        console.log(minute);
+        return (
+        <select value={minute} onChange={this.handleMinuteStartChange}>
+            {minutes}
+        </select>
+        )
+    }
+
+    renderTimeOfDayStart() {
+        let timeOfDay = this.props.currentlesson.startsAt.substring(9,11);
+        return (
+            <select value={timeOfDay} onChange={this.handleTimeOfDayStartChange}>
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+            </select>
+        )
     }
 
     findGroup(groupName) {
@@ -53,6 +99,29 @@ export default class Lesson extends Component {
         this.props.currentlesson.classroom.number = event.target.value;
         this.setState({
             classroom: event.target.value,
+        })
+    }
+
+    handleHourStartChange(event) {
+        this.props.currentlesson.startsAt = event.target.value + this.props.currentlesson.startsAt.slice(2,11);
+        this.setState({
+            startsAt: this.props.currentlesson.startsAt,
+        })
+
+    }
+
+    handleMinuteStartChange(event) {
+        let tmp = this.props.currentlesson.startsAt;
+        this.props.currentlesson.startsAt = tmp.slice(0,3) + event.target.value + this.props.currentlesson.startsAt.slice(5,11);
+        this.setState({
+            startsAt: this.props.currentlesson.startsAt,
+        })
+    }
+
+    handleTimeOfDayStartChange(event) {
+        this.props.currentlesson.startsAt = this.props.currentlesson.startsAt.slice(0,9) + event.target.value;
+        this.setState({
+            startsAt: this.props.currentlesson.startsAt,
         })
     }
 
@@ -86,7 +155,13 @@ export default class Lesson extends Component {
                         <br/>
                         <label>{'\n'}Date{' '}</label>
                         <br/>
-                        <label>Starts at{' '}</label>
+                        <label>Starts at{' '}{this.props.currentlesson.startsAt}
+                            {this.renderHoursStart()}
+                            {' '}
+                            {this.renderMinutesStart()}
+                            {' '}
+                            {this.renderTimeOfDayStart()}
+                        </label>
                         <br/>
                         <label>Ends at{' '}</label>
                         <br/>
