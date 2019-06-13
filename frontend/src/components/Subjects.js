@@ -22,6 +22,7 @@ export default class Subjects extends React.Component {
     };
     convert(data) {
       var subjects = []
+      data.shift()
       for(var subject in data){
         var obj = {}
         obj.id = subject
@@ -35,7 +36,6 @@ export default class Subjects extends React.Component {
         // if(data)
         subjects.push(obj)
       }
-      console.log(subjects)
       return subjects
     }
   
@@ -113,10 +113,8 @@ export default class Subjects extends React.Component {
       var rowDel = this.props.onRowDel;
       var filterText = this.props.filterText;
       var id = 0;
-      console.log('KONSOLOGI')
 
       var subject = this.props.subjects.map(function(subject) {
-        console.log(subject.Classroom)
          if (subject.Classroom.toLowerCase().indexOf(filterText.toLowerCase()) === -1 && subject.Subject.toLowerCase().indexOf(filterText.toLowerCase()) && subject.Group.toLowerCase().indexOf(filterText.toLowerCase()) && subject.Lecturer.toLowerCase().indexOf(filterText.toLowerCase())) {
            return;
          }
@@ -140,7 +138,6 @@ export default class Subjects extends React.Component {
                 <th>Date</th>
                 <th>Hours</th>
                 <th>Group</th>
-                <th>Sala</th>
                 <th>Subject</th>
                 <th>Classroom</th>
                 <th>Lecturer</th>
