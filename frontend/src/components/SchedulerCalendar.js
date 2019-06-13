@@ -39,6 +39,23 @@ const normalStyle={
 
 class SchedulerCalendar extends Component {
 
+    getGroups(studentsGroup) {
+        return _.uniqBy(studentsGroup, 'id').map(studentGroup =>{
+            return {id: studentGroup.id,
+                    name: studentGroup.name,
+                    students: studentGroup.students,
+            }
+        });
+    }
+
+    getClassrooms(classrooms) {
+        return _.uniqBy(classrooms, 'id').map(classroom =>{
+            return {id: classroom.id,
+                number: classroom.number,
+            }
+        });
+    }
+
     parseLecturers(lecturers){
         return _.uniqBy(lecturers, 'id').map( lecturer =>{
             return {id: lecturer.id,
@@ -140,12 +157,16 @@ class SchedulerCalendar extends Component {
 
     componentWillReceiveProps(nextProps, nextContext) {
         let groups = this.parseLecturers(nextProps.lessons.map(({ lecturer }) => lecturer));
-            groups.push({ id: 0, title: 'CS', root: true });
+        groups.push({ id: 0, title: 'CS', root: true });
+        let allGroups = this.getGroups(nextProps.lessons.map(({ studentsGroup }) => studentsGroup));
+        let allClassrooms = this.getClassrooms(nextProps.lessons.map(({ classroom}) => classroom));
 
         this.setState({
             lessons: nextProps.lessons,
             groups: groups,
             currentlesson: nextProps.lessons[0],
+            allGroups: allGroups,
+            allClassrooms: allClassrooms,
         });
         this.checkConflicts();
     }
@@ -173,7 +194,9 @@ class SchedulerCalendar extends Component {
         this.handleLessonClick = this.handleLessonClick.bind(this);
         this.handleButton = this.handleButton.bind(this);
         this.handleOverride = this.handleOverride.bind(this);
+        this.updateLesson = this.updateLesson.bind(this);
     }
+
 
     handleTimeChange(visibleTimeStart, visibleTimeEnd){
         this.setState({
@@ -212,15 +235,17 @@ class SchedulerCalendar extends Component {
 
 
             const newLesson = { ...lesson, date: newDate.format("lll"),
-                startsAt: newDate.format("HH:mm:ss"),
-                endsAt: newDate.add(duration).format("HH:mm:ss"),
+                startsAt: newDate.format("hh:mm:ss A"),
+                endsAt: newDate.add(duration).format("hh:mm:ss A"),
                 lecturer: lecturer};
 
+            console.log(this.state.lessons);
             this.setState({
                 lessons: lessons.map(lesson => lesson.id === itemId
                     ? Object.assign({}, lesson, newLesson)
                     : lesson)
             });
+            console.log(this.state.lessons);
             this.checkConflicts();
         }
     };
@@ -232,8 +257,8 @@ class SchedulerCalendar extends Component {
         const lesson = lessons.find(lesson => lesson.id == itemId);
 
         const newLesson = { ...lesson,
-                          startsAt: edge === "left" ? moment(time).format("HH:MM") : lesson.startsAt,
-                            endsAt: edge === "left" ? lesson.endsAt : moment(time).format("HH:MM")};
+                          startsAt: edge === "left" ? moment(time).format("hh:mm:ss A") : lesson.startsAt,
+                            endsAt: edge === "left" ? lesson.endsAt : moment(time).format("hh:mm:ss A")};
 
         console.log(newLesson)
         this.setState({
@@ -259,6 +284,23 @@ class SchedulerCalendar extends Component {
     handleOverride(){
         console.log("override db");
         this.props.sendLessons(this.state.lessons);
+    }
+
+    updateLesson(newLesson){
+
+        let { lessons } = this.state;
+
+        const index = lessons.findIndex(lesson => lesson.id == newLesson.id);
+
+        lessons[index] = newLesson;
+
+        if(index) {
+            this.setState({
+                lessons: lessons
+            });
+        }
+        console.log(this.state.lessons[index]);
+        this.checkConflicts();
     }
 
     itemRenderer({item,itemContext,getItemProps,getResizeProps}){
@@ -304,6 +346,9 @@ class SchedulerCalendar extends Component {
 
         return (
             <div>
+                <header className="headerMain">
+                    <h2 className="logo">Scheduling Supporter</h2>
+                </header>
                 <div className="header">
                     <div style={{padding: "50px"}}>
                         <div className="row"><div className="col-xs-12">
@@ -361,6 +406,9 @@ class SchedulerCalendar extends Component {
                         show={this.state.modalShow}
                         onHide={modalClose}
                         currentlesson={this.state.currentlesson}
+                        allgroups={this.state.allGroups}
+                        allclassrooms={this.state.allClassrooms}
+                        save={this.updateLesson}
                     />
                 <p/>
                 {this.state.lessonsConflicts.length ? <Conflicts lessonsConflicts={this.state.lessonsConflicts}/>

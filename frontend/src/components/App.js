@@ -14,12 +14,17 @@ class App extends Component {
 
   render() {
     return (
+        <div>
+        <header className="headerMain">
+            <h2 className="logo">Scheduling Supporter</h2>
+        </header>
         <div className="header">
           <div style={{padding: "50px"}}>
           <div className="row"><div className="col-xs-12">
               <button className="btn btn-success" onClick={this.redirectToUpload}>Upload Schedule</button>
           </div></div>
           </div>
+        </div>
         </div>
     );
   }
