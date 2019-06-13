@@ -25,17 +25,17 @@ export default class Subjects extends React.Component {
       for(var subject in data){
         var obj = {}
         obj.id = subject
-        obj.Zjazd_nr = data[subject][0]
+        obj.MeetingNumber = data[subject][0]
         obj.Data = data[subject][1]
-        obj.Godziny = data[subject][2]
-        obj.G1_przedmiot = data[subject][3]
-        obj.G1_sala = data[subject][4]
-        obj.G1_prowadzacy = data[subject][5]
-        obj.G2_przedmiot = data[subject][6]
-        obj.G2_sala = data[subject][7]
-        obj.G2_prowadzacy = data[subject][8]
+        obj.Hours = data[subject][2]
+        obj.Group = data[subject][3]
+        obj.Subject = data[subject][4]
+        obj.Classroom = data[subject][5]
+        obj.Lecturer = data[subject][6]
+        // if(data)
         subjects.push(obj)
       }
+      console.log(subjects)
       return subjects
     }
   
@@ -43,15 +43,13 @@ export default class Subjects extends React.Component {
       var id = (+ new Date() + Math.floor(Math.random() * 999999)).toString(36);
       var subject = {
         id: id,
-        Zjazd_nr: "",
+        MeetingNumber: "",
         Data: "",
-        Godziny: "",
-        G1_prowadzacy: "",
-        G1_sala: "",
-        G1_przedmiot: "",
-        G2_prowadzacy: "",
-        G2_sala: "",
-        G2_przedmiot: "",
+        Hours: "",
+        Classroom: "",
+        Subject: "",
+        Group: "",
+        Lecturer: "",
       }
       this.state.subjects.push(subject);
       this.setState(this.state.subjects);
@@ -115,10 +113,14 @@ export default class Subjects extends React.Component {
       var rowDel = this.props.onRowDel;
       var filterText = this.props.filterText;
       var id = 0;
+      console.log('KONSOLOGI')
+
       var subject = this.props.subjects.map(function(subject) {
-         if (subject.G1_prowadzacy.toLowerCase().indexOf(filterText.toLowerCase()) === -1 && subject.G2_prowadzacy.toLowerCase().indexOf(filterText.toLowerCase()) && subject.G1_przedmiot.toLowerCase().indexOf(filterText.toLowerCase()) && subject.G2_przedmiot.toLowerCase().indexOf(filterText.toLowerCase())) {
+        console.log(subject.Classroom)
+         if (subject.Classroom.toLowerCase().indexOf(filterText.toLowerCase()) === -1 && subject.Subject.toLowerCase().indexOf(filterText.toLowerCase()) && subject.Group.toLowerCase().indexOf(filterText.toLowerCase()) && subject.Lecturer.toLowerCase().indexOf(filterText.toLowerCase())) {
            return;
          }
+      var subject 
       //   if (subject[3] === filterText) {
       //     return;
       //  }
@@ -134,15 +136,14 @@ export default class Subjects extends React.Component {
           <table className="table table-bordered">
             <thead>
               <tr>
-                <th>Zjazd nr</th>
-                <th>Data</th>
-                <th>Godziny</th>
-                <th>Grupa 1 - Przedmiot</th>
+                <th>MeetingNumber</th>
+                <th>Date</th>
+                <th>Hours</th>
+                <th>Group</th>
                 <th>Sala</th>
-                <th>Grupa 1 - Prowadzacy</th>
-                <th>Grupa 2 - Przedmiot</th>
-                <th>Sala</th>
-                <th>Grupa 2 - Prowadzacy</th>
+                <th>Subject</th>
+                <th>Classroom</th>
+                <th>Lecturer</th>
               </tr>
             </thead>
   
@@ -169,8 +170,8 @@ export default class Subjects extends React.Component {
       return (
         <tr className="eachRow">
           <EditableCell onSubjectTableUpdate={this.props.onSubjectTableUpdate} cellData={{
-            type: "Zjazd_nr",
-            value: this.props.subject.Zjazd_nr,
+            type: "MeetingNumber",
+            value: this.props.subject.MeetingNumber,
             id: this.props.subject.id
           }}/>
           <EditableCell onSubjectTableUpdate={this.props.onSubjectTableUpdate} cellData={{
@@ -179,38 +180,28 @@ export default class Subjects extends React.Component {
             id: this.props.subject.id
           }}/>
           <EditableCell onSubjectTableUpdate={this.props.onSubjectTableUpdate} cellData={{
-            type: "Godziny",
-            value: this.props.subject.Godziny,
+            type: "Hours",
+            value: this.props.subject.Hours,
             id: this.props.subject.id
           }}/>
           <EditableCell onSubjectTableUpdate={this.props.onSubjectTableUpdate} cellData={{
-            type: "G1_przedmiot",
-            value: this.props.subject.G1_przedmiot,
+            type: "Group",
+            value: this.props.subject.Group,
             id: this.props.subject.id
           }}/>
           <EditableCell onSubjectTableUpdate={this.props.onSubjectTableUpdate} cellData={{
-            type: "G1_sala",
-            value: this.props.subject.G1_sala,
+            type: "Subject",
+            value: this.props.subject.Subject,
             id: this.props.subject.id
           }}/>
           <EditableCell onSubjectTableUpdate={this.props.onSubjectTableUpdate} cellData={{
-            type: "G1_prowadzacy",
-            value: this.props.subject.G1_prowadzacy,
+            type: "Classroom",
+            value: this.props.subject.Classroom,
             id: this.props.subject.id
           }}/>
           <EditableCell onSubjectTableUpdate={this.props.onSubjectTableUpdate} cellData={{
-            type: "G2_przedmiot",
-            value: this.props.subject.G2_przedmiot,
-            id: this.props.subject.id
-          }}/>
-          <EditableCell onSubjectTableUpdate={this.props.onSubjectTableUpdate} cellData={{
-            type: "G2_sala",
-            value: this.props.subject.G2_sala,
-            id: this.props.subject.id
-          }}/>
-          <EditableCell onSubjectTableUpdate={this.props.onSubjectTableUpdate} cellData={{
-            type: "G2_prowadzacy",
-            value: this.props.subject.G2_prowadzacy,
+            type: "Lecturer",
+            value: this.props.subject.Lecturer,
             id: this.props.subject.id
           }}/>
           <td className="del-cell">
