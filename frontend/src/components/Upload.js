@@ -45,15 +45,13 @@ class SheetJSApp extends Component {
         var data = []
         for(var v in value){
             var row = []
-            row[0] = value[v].Zjazd_nr
+            row[0] = value[v].MeetingNumber
             row[1] = value[v].Data
-            row[2] = value[v].Godziny
-            row[3] = value[v].G1_przedmiot
-            row[4] = value[v].G1_sala
-            row[5] = value[v].G1_prowadzacy
-            row[6] = value[v].G2_przedmiot
-            row[7] = value[v].G2_sala
-            row[8] = value[v].G2_prowadzacy
+            row[2] = value[v].Hours
+            row[3] = value[v].Group
+            row[4] = value[v].Subject
+            row[5] = value[v].Classroom
+            row[6] = value[v].Lecturer
             data.push(row)
         }
         return data
