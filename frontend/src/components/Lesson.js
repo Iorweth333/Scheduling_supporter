@@ -7,8 +7,8 @@ export default class Lesson extends Component {
         super(props);
 
         this.state = {
-            group: this.props.currentlesson.studentsGroup.name,
-            classroom: this.props.currentlesson.classroom.number,
+            group: this.props.currentlesson.studentsGroup,
+            classroom: this.props.currentlesson.classroom,
             startsAt: this.props.currentlesson.startsAt,
             endsAt: this.props.currentlesson.endsAt,
             date: this.props.currentlesson.date,
@@ -25,6 +25,7 @@ export default class Lesson extends Component {
         this.handleMonthChange = this.handleMonthChange.bind(this);
         this.handleDayChange = this.handleDayChange.bind(this);
         this.handleYearChange = this.handleYearChange.bind(this);
+        this.updateLesson = this.updateLesson.bind(this);
     }
 
     renderGroups(allGroups) {
@@ -200,17 +201,27 @@ export default class Lesson extends Component {
     }
 
     handleGroupChange(event) {
-        this.props.currentlesson.studentsGroup.name = event.target.value;
+        const {allgroups} =  this.props;
+        const group = allgroups.find(group => group.name == event.target.value);
         this.setState({
-            group: event.target.value,
-        })
+            group: group,
+        });
+        this.props.currentlesson.studentsGroup = group;
     }
 
     handleClassroomChange(event) {
-        this.props.currentlesson.classroom.number = event.target.value;
+        const {allclassrooms} =  this.props;
+        console.log(allclassrooms);
+
+        const classroom = allclassrooms.find(classroom => classroom.number == event.target.value);
+
+        console.log(classroom);
+
         this.setState({
-            classroom: event.target.value,
-        })
+            classroom: classroom
+        });
+
+        this.props.currentlesson.classroom = classroom;
     }
 
     handleHourStartChange(event) {
@@ -291,6 +302,11 @@ export default class Lesson extends Component {
         })
     }
 
+    updateLesson(){
+        const {currentlesson} = this.props;
+        this.props.onHide();
+        this.props.save(currentlesson);
+    }
     render() {
         return (
             <Modal
@@ -345,7 +361,8 @@ export default class Lesson extends Component {
                     </form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={this.props.onHide}>Close</Button>
+                    {/*<Button onClick={this.props.onHide}>Close</Button>*/}
+                    <Button onClick={this.updateLesson}>Save</Button>
                 </Modal.Footer>
             </Modal>
         );

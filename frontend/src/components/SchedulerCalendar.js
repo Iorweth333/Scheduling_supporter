@@ -194,6 +194,7 @@ class SchedulerCalendar extends Component {
         this.handleLessonClick = this.handleLessonClick.bind(this);
         this.handleButton = this.handleButton.bind(this);
         this.handleOverride = this.handleOverride.bind(this);
+        this.updateLesson = this.updateLesson.bind(this);
     }
 
 
@@ -281,6 +282,23 @@ class SchedulerCalendar extends Component {
     handleOverride(){
         console.log("override db");
         this.props.sendLessons(this.state.lessons);
+    }
+
+    updateLesson(newLesson){
+
+        let { lessons } = this.state;
+
+        const index = lessons.findIndex(lesson => lesson.id == newLesson.id);
+
+        lessons[index] = newLesson;
+
+        if(index) {
+            this.setState({
+                lessons: lessons
+            });
+        }
+        console.log(this.state.lessons[index]);
+        this.checkConflicts();
     }
 
     itemRenderer({item,itemContext,getItemProps,getResizeProps}){
@@ -388,6 +406,7 @@ class SchedulerCalendar extends Component {
                         currentlesson={this.state.currentlesson}
                         allgroups={this.state.allGroups}
                         allclassrooms={this.state.allClassrooms}
+                        save={this.updateLesson}
                     />
                 <p/>
                 {this.state.lessonsConflicts.length ? <Conflicts lessonsConflicts={this.state.lessonsConflicts}/>
