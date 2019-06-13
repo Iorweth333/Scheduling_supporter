@@ -235,15 +235,17 @@ class SchedulerCalendar extends Component {
 
 
             const newLesson = { ...lesson, date: newDate.format("lll"),
-                startsAt: newDate.format("HH:mm:ss"),
-                endsAt: newDate.add(duration).format("HH:mm:ss"),
+                startsAt: newDate.format("hh:mm:ss A"),
+                endsAt: newDate.add(duration).format("hh:mm:ss A"),
                 lecturer: lecturer};
 
+            console.log(this.state.lessons);
             this.setState({
                 lessons: lessons.map(lesson => lesson.id === itemId
                     ? Object.assign({}, lesson, newLesson)
                     : lesson)
             });
+            console.log(this.state.lessons);
             this.checkConflicts();
         }
     };
@@ -255,8 +257,8 @@ class SchedulerCalendar extends Component {
         const lesson = lessons.find(lesson => lesson.id == itemId);
 
         const newLesson = { ...lesson,
-                          startsAt: edge === "left" ? moment(time).format("HH:MM") : lesson.startsAt,
-                            endsAt: edge === "left" ? lesson.endsAt : moment(time).format("HH:MM")};
+                          startsAt: edge === "left" ? moment(time).format("hh:mm:ss A") : lesson.startsAt,
+                            endsAt: edge === "left" ? lesson.endsAt : moment(time).format("hh:mm:ss A")};
 
         console.log(newLesson)
         this.setState({
